@@ -1,7 +1,3 @@
-
-#ifndef __APPLE__
-#include "stdafx.h"
-#endif
 #include "UnityNativeAudio.h"
 
 //#define DEBUG_SINE
@@ -14,7 +10,7 @@ struct UserData {
 	unsigned int inchannels;
 
 	const char **outports;
-	const char *client_name = "iosono_unity_player";
+	const char *client_name = "Unity3D";
 	const char *server_name = NULL;
 	jack_options_t options = JackNullOption;
 	jack_status_t status;
@@ -155,10 +151,8 @@ int startNativeAudio(int inchannels, int outchannels) {
 	 */
 
 #ifdef WIN32
-	printf("engine sample rate: %" PRIu32 "\n",
-		jack_get_sample_rate(client));
-	printf("engine buffer size: %" PRIu32 "\n",
-		jack_get_buffer_size(client));
+	std::cout << "engine sample rate: " << jack_get_sample_rate(client) << std::endl;
+	std::cout << "engine buffer size: " << jack_get_buffer_size(client) << std::endl;
 #else
     std::cout << jack_get_sample_rate(client) << std::endl;
     std::cout << jack_get_buffer_size(client) << std::endl;

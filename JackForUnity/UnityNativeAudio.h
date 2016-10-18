@@ -1,4 +1,4 @@
-#pragma once
+
 #ifdef __APPLE__
 #include <CoreAudio/AudioHardware.h>
 #include <iostream>
@@ -26,7 +26,7 @@ typedef jack_default_audio_sample_t sample_t;
 
 typedef void(*FuncPtr)(const char *);
 
-#define PRIu32 "lu" 
+//#define PRIu32 "lu" 
 
 static FuncPtr Debug;
 #define _BUFFER_FRAMES 1024
