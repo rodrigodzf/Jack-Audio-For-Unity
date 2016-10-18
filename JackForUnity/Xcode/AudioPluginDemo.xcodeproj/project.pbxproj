@@ -1,0 +1,444 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2BC2A8D5144C433D00D5EF79 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BC2A8D4144C433D00D5EF79 /* OpenGL.framework */; };
+		2FC746C31DB2DD0B00BF70AF /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FC746C21DB2DD0B00BF70AF /* main.cpp */; };
+		2FDC625A1DB65BB70076344B /* Plugin_TestShared.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FDC62561DB65BB70076344B /* Plugin_TestShared.cpp */; };
+		2FDC625B1DB65BB70076344B /* TestSharedLib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FDC62571DB65BB70076344B /* TestSharedLib.cpp */; };
+		2FDC625C1DB65BB70076344B /* UnityNativeAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FDC62581DB65BB70076344B /* UnityNativeAudio.cpp */; };
+		2FEA1E391C873B53002F8E2A /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FEA1E381C873B53002F8E2A /* CoreMIDI.framework */; };
+		3D199B6E1858F3E60063EC53 /* AudioPluginUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D199B5E1858F3E60063EC53 /* AudioPluginUtil.cpp */; };
+		8D576314048677EA00EA77CD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2FC746BE1DB2DD0B00BF70AF /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
+		2BC2A8D4144C433D00D5EF79 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		2FC746C01DB2DD0B00BF70AF /* TestPlugin */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestPlugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		2FC746C21DB2DD0B00BF70AF /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		2FDC62561DB65BB70076344B /* Plugin_TestShared.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Plugin_TestShared.cpp; path = ../Plugin_TestShared.cpp; sourceTree = "<group>"; };
+		2FDC62571DB65BB70076344B /* TestSharedLib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TestSharedLib.cpp; path = ../TestSharedLib.cpp; sourceTree = "<group>"; };
+		2FDC62581DB65BB70076344B /* UnityNativeAudio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UnityNativeAudio.cpp; path = ../UnityNativeAudio.cpp; sourceTree = "<group>"; };
+		2FDC62591DB65BB70076344B /* UnityNativeAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UnityNativeAudio.h; path = ../UnityNativeAudio.h; sourceTree = "<group>"; };
+		2FEA1E381C873B53002F8E2A /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
+		3D199B5E1858F3E60063EC53 /* AudioPluginUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AudioPluginUtil.cpp; path = ../AudioPluginUtil.cpp; sourceTree = "<group>"; };
+		3D199B5F1858F3E60063EC53 /* AudioPluginUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioPluginUtil.h; path = ../AudioPluginUtil.h; sourceTree = "<group>"; };
+		3D199B6D1858F3E60063EC53 /* PluginList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginList.h; path = ../PluginList.h; sourceTree = "<group>"; };
+		3DA35E0E175F7CA000FA3842 /* AudioPluginInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioPluginInterface.h; path = ../AudioPluginInterface.h; sourceTree = "<group>"; };
+		8D576316048677EA00EA77CD /* AudioPluginDemo.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AudioPluginDemo.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D576317048677EA00EA77CD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2FC746BD1DB2DD0B00BF70AF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D576313048677EA00EA77CD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2FEA1E391C873B53002F8E2A /* CoreMIDI.framework in Frameworks */,
+				8D576314048677EA00EA77CD /* CoreFoundation.framework in Frameworks */,
+				2BC2A8D5144C433D00D5EF79 /* OpenGL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		089C166AFE841209C02AAC07 /* AudioPluginDemo */ = {
+			isa = PBXGroup;
+			children = (
+				08FB77AFFE84173DC02AAC07 /* Source */,
+				089C167CFE841241C02AAC07 /* Resources */,
+				089C1671FE841209C02AAC07 /* External Frameworks and Libraries */,
+				2FC746C11DB2DD0B00BF70AF /* TestPlugin */,
+				19C28FB6FE9D52B211CA2CBB /* Products */,
+			);
+			name = AudioPluginDemo;
+			sourceTree = "<group>";
+		};
+		089C1671FE841209C02AAC07 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				2FEA1E381C873B53002F8E2A /* CoreMIDI.framework */,
+				0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */,
+				2BC2A8D4144C433D00D5EF79 /* OpenGL.framework */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		089C167CFE841241C02AAC07 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8D576317048677EA00EA77CD /* Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		08FB77AFFE84173DC02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				2FDC62561DB65BB70076344B /* Plugin_TestShared.cpp */,
+				2FDC62571DB65BB70076344B /* TestSharedLib.cpp */,
+				2FDC62581DB65BB70076344B /* UnityNativeAudio.cpp */,
+				2FDC62591DB65BB70076344B /* UnityNativeAudio.h */,
+				3D199B5E1858F3E60063EC53 /* AudioPluginUtil.cpp */,
+				3D199B5F1858F3E60063EC53 /* AudioPluginUtil.h */,
+				3D199B6D1858F3E60063EC53 /* PluginList.h */,
+				3DA35E0E175F7CA000FA3842 /* AudioPluginInterface.h */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		19C28FB6FE9D52B211CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D576316048677EA00EA77CD /* AudioPluginDemo.bundle */,
+				2FC746C01DB2DD0B00BF70AF /* TestPlugin */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2FC746C11DB2DD0B00BF70AF /* TestPlugin */ = {
+			isa = PBXGroup;
+			children = (
+				2FC746C21DB2DD0B00BF70AF /* main.cpp */,
+			);
+			path = TestPlugin;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2FC746BF1DB2DD0B00BF70AF /* TestPlugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2FC746C41DB2DD0B00BF70AF /* Build configuration list for PBXNativeTarget "TestPlugin" */;
+			buildPhases = (
+				2FC746BC1DB2DD0B00BF70AF /* Sources */,
+				2FC746BD1DB2DD0B00BF70AF /* Frameworks */,
+				2FC746BE1DB2DD0B00BF70AF /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TestPlugin;
+			productName = TestPlugin;
+			productReference = 2FC746C01DB2DD0B00BF70AF /* TestPlugin */;
+			productType = "com.apple.product-type.tool";
+		};
+		8D57630D048677EA00EA77CD /* Jack */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB911A08733D790010E9CD /* Build configuration list for PBXNativeTarget "Jack" */;
+			buildPhases = (
+				8D57630F048677EA00EA77CD /* Resources */,
+				8D576311048677EA00EA77CD /* Sources */,
+				8D576313048677EA00EA77CD /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Jack;
+			productInstallPath = "$(HOME)/Library/Bundles";
+			productName = AudioPluginDemo;
+			productReference = 8D576316048677EA00EA77CD /* AudioPluginDemo.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		089C1669FE841209C02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				TargetAttributes = {
+					2FC746BF1DB2DD0B00BF70AF = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 1DEB911E08733D790010E9CD /* Build configuration list for PBXProject "AudioPluginDemo" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 089C166AFE841209C02AAC07 /* AudioPluginDemo */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8D57630D048677EA00EA77CD /* Jack */,
+				2FC746BF1DB2DD0B00BF70AF /* TestPlugin */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D57630F048677EA00EA77CD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2FC746BC1DB2DD0B00BF70AF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2FC746C31DB2DD0B00BF70AF /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D576311048677EA00EA77CD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2FDC625A1DB65BB70076344B /* Plugin_TestShared.cpp in Sources */,
+				2FDC625C1DB65BB70076344B /* UnityNativeAudio.cpp in Sources */,
+				2FDC625B1DB65BB70076344B /* TestSharedLib.cpp in Sources */,
+				3D199B6E1858F3E60063EC53 /* AudioPluginUtil.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB911B08733D790010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = YES;
+				DSTROOT = "$(PROJECT_DIR)/../../sample_jackscene/Assets";
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+				);
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = /Plugins;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/lib,
+				);
+				OTHER_LDFLAGS = "-ljack";
+				PRODUCT_NAME = AudioPluginDemo;
+				SKIP_INSTALL = NO;
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/AudioUnitExamples/AUPublic/AUBase $(PROJECT_DIR)/AudioUnitExamples/AUPublic/OtherBases $(PROJECT_DIR)/AudioUnitExamples/AUPublic/Utility $(PROJECT_DIR)/AudioUnitExamples/PublicUtility";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		1DEB911C08733D790010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = YES;
+				DSTROOT = "$(PROJECT_DIR)/../../sample_jackscene/Assets";
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+				);
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = /Plugins;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/lib,
+				);
+				OTHER_LDFLAGS = "-ljack";
+				PRODUCT_NAME = AudioPluginDemo;
+				SKIP_INSTALL = NO;
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/AudioUnitExamples/AUPublic/AUBase $(PROJECT_DIR)/AudioUnitExamples/AUPublic/OtherBases $(PROJECT_DIR)/AudioUnitExamples/AUPublic/Utility $(PROJECT_DIR)/AudioUnitExamples/PublicUtility";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+		1DEB911F08733D790010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+			};
+			name = Debug;
+		};
+		1DEB912008733D790010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				PREBINDING = NO;
+			};
+			name = Release;
+		};
+		2FC746C51DB2DD0B00BF70AF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "-ljack";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Debug;
+		};
+		2FC746C61DB2DD0B00BF70AF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "-ljack";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB911A08733D790010E9CD /* Build configuration list for PBXNativeTarget "Jack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB911B08733D790010E9CD /* Debug */,
+				1DEB911C08733D790010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		1DEB911E08733D790010E9CD /* Build configuration list for PBXProject "AudioPluginDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB911F08733D790010E9CD /* Debug */,
+				1DEB912008733D790010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		2FC746C41DB2DD0B00BF70AF /* Build configuration list for PBXNativeTarget "TestPlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2FC746C51DB2DD0B00BF70AF /* Debug */,
+				2FC746C61DB2DD0B00BF70AF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 089C1669FE841209C02AAC07 /* Project object */;
+}

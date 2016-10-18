@@ -1,0 +1,3 @@
+/Users/rodrigodiaz/Development/0.2-diaz/JackForUnity/cmake/CMakeFiles/edit_cache.dir
+/Users/rodrigodiaz/Development/0.2-diaz/JackForUnity/cmake/CMakeFiles/rebuild_cache.dir
+/Users/rodrigodiaz/Development/0.2-diaz/JackForUnity/cmake/CMakeFiles/UnityJackAudio.dir
