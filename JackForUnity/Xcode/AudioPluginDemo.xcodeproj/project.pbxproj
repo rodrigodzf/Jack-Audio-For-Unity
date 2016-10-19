@@ -8,11 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		2BC2A8D5144C433D00D5EF79 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BC2A8D4144C433D00D5EF79 /* OpenGL.framework */; };
-		2FB6BB071DB75FA2004BC15D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FB6BB061DB75FA2004BC15D /* main.cpp */; };
 		2FDC625A1DB65BB70076344B /* Plugin_TestShared.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FDC62561DB65BB70076344B /* Plugin_TestShared.cpp */; };
 		2FDC625B1DB65BB70076344B /* TestSharedLib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FDC62571DB65BB70076344B /* TestSharedLib.cpp */; };
-		2FDC625C1DB65BB70076344B /* UnityNativeAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FDC62581DB65BB70076344B /* UnityNativeAudio.cpp */; };
 		2FEA1E391C873B53002F8E2A /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FEA1E381C873B53002F8E2A /* CoreMIDI.framework */; };
+		2FF2ACB61DB7D545004BBA38 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FF2ACB51DB7D545004BBA38 /* main.cpp */; };
 		3D199B6E1858F3E60063EC53 /* AudioPluginUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D199B5E1858F3E60063EC53 /* AudioPluginUtil.cpp */; };
 		8D576314048677EA00EA77CD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */; };
 /* End PBXBuildFile section */
@@ -32,14 +31,12 @@
 /* Begin PBXFileReference section */
 		0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		2BC2A8D4144C433D00D5EF79 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		2FB6BB061DB75FA2004BC15D /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = "/Users/rodrigodiaz/Development/0.2-diaz/JackForUnity/main.cpp"; sourceTree = "<absolute>"; };
 		2FC746C01DB2DD0B00BF70AF /* TestPlugin */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestPlugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FDC62561DB65BB70076344B /* Plugin_TestShared.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Plugin_TestShared.cpp; path = ../Plugin_TestShared.cpp; sourceTree = "<group>"; };
 		2FDC62571DB65BB70076344B /* TestSharedLib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TestSharedLib.cpp; path = ../TestSharedLib.cpp; sourceTree = "<group>"; };
-		2FDC62581DB65BB70076344B /* UnityNativeAudio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UnityNativeAudio.cpp; path = ../UnityNativeAudio.cpp; sourceTree = "<group>"; };
-		2FDC62591DB65BB70076344B /* UnityNativeAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UnityNativeAudio.h; path = ../UnityNativeAudio.h; sourceTree = "<group>"; };
 		2FEA1E381C873B53002F8E2A /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
 		2FF2ACB41DB767F9004BBA38 /* InternalJackClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InternalJackClient.h; path = ../InternalJackClient.h; sourceTree = "<group>"; };
+		2FF2ACB51DB7D545004BBA38 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = "/Users/rodrigodiaz/Development/0.2-diaz/JackForUnity/test/main.cpp"; sourceTree = "<absolute>"; };
 		3D199B5E1858F3E60063EC53 /* AudioPluginUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AudioPluginUtil.cpp; path = ../AudioPluginUtil.cpp; sourceTree = "<group>"; };
 		3D199B5F1858F3E60063EC53 /* AudioPluginUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioPluginUtil.h; path = ../AudioPluginUtil.h; sourceTree = "<group>"; };
 		3D199B6D1858F3E60063EC53 /* PluginList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginList.h; path = ../PluginList.h; sourceTree = "<group>"; };
@@ -105,8 +102,6 @@
 				2FF2ACB41DB767F9004BBA38 /* InternalJackClient.h */,
 				2FDC62561DB65BB70076344B /* Plugin_TestShared.cpp */,
 				2FDC62571DB65BB70076344B /* TestSharedLib.cpp */,
-				2FDC62581DB65BB70076344B /* UnityNativeAudio.cpp */,
-				2FDC62591DB65BB70076344B /* UnityNativeAudio.h */,
 				3D199B5E1858F3E60063EC53 /* AudioPluginUtil.cpp */,
 				3D199B5F1858F3E60063EC53 /* AudioPluginUtil.h */,
 				3D199B6D1858F3E60063EC53 /* PluginList.h */,
@@ -127,7 +122,7 @@
 		2FC746C11DB2DD0B00BF70AF /* TestPlugin */ = {
 			isa = PBXGroup;
 			children = (
-				2FB6BB061DB75FA2004BC15D /* main.cpp */,
+				2FF2ACB51DB7D545004BBA38 /* main.cpp */,
 			);
 			path = TestPlugin;
 			sourceTree = "<group>";
@@ -218,7 +213,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FB6BB071DB75FA2004BC15D /* main.cpp in Sources */,
+				2FF2ACB61DB7D545004BBA38 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,7 +222,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FDC625A1DB65BB70076344B /* Plugin_TestShared.cpp in Sources */,
-				2FDC625C1DB65BB70076344B /* UnityNativeAudio.cpp in Sources */,
 				2FDC625B1DB65BB70076344B /* TestSharedLib.cpp in Sources */,
 				3D199B6E1858F3E60063EC53 /* AudioPluginUtil.cpp in Sources */,
 			);

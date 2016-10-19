@@ -49,15 +49,12 @@ namespace JackAudio
 
         public int GetBufferSize()
         {
-            int bufsize;
-            int numbuffers;
-            AudioSettings.GetDSPBufferSize(out bufsize, out numbuffers);
-            Debug.Log("Unity bufsize " + bufsize + " numbufs " + numbuffers);
-            return bufsize;
+            return BUFFER_SIZE;
         }
         void Awake()
         {
-            BUFFER_SIZE = GetBufferSize();
+            int numbuffers;
+            AudioSettings.GetDSPBufferSize(out BUFFER_SIZE, out numbuffers);
         }
 
         void OnDestroy()
