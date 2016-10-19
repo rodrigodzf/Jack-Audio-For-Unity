@@ -94,10 +94,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalDependencies>kernel32.lib;user32.lib;winmm.lib;C:\Program Files (x86)\Jack\lib\libjack64.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;winmm.lib;C:\Program Files (x86)\Jack\lib\libjack.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir ..\..\Assets\Plugins\x86
+      <Command>mkdir ..\..\sample_jackscene\Assets\Plugins\x86
 copy $(TargetPath) ..\..\sample_jackscene\Assets\Plugins\x86\$(TargetName).dll
 </Command>
     </PostBuildEvent>
@@ -185,8 +185,8 @@ copy $(TargetPath) ..\..\sample_jackscene\Assets\Plugins\x86\$(TargetName).dll
       <AdditionalDependencies>kernel32.lib;user32.lib;winmm.lib;C:\Program Files (x86)\Jack\lib\libjack64.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir ..\..\Assets\Plugins\x86_64
-copy /y $(TargetPath) ..\..\Assets\Plugins\x86_64\$(TargetName).dll
+      <Command>mkdir  ..\..\sample_jackscene\Assets\Plugins\x86_64
+copy /y $(TargetPath) ..\..\sample_jackscene\Assets\Plugins\x86_64\$(TargetName).dll
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

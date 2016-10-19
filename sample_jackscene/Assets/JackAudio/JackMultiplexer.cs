@@ -138,7 +138,7 @@ public class JackMultiplexer : MonoBehaviour {
         }
  
         JackWrapper.SetMixedData(mixedBufferOut);
-        JackWrapper.GetMixedData(mixedBufferIn);
+        //JackWrapper.GetMixedData(mixedBufferIn);
 
         // System.Array.Clear(buffer, 0, buffer.Length);
     }
