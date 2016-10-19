@@ -25,7 +25,7 @@
 #include <stdexcept>  // for std::runtime_error
 #include <vector>     // for std::vector
 
-#define RINGBUF_SIZE 4096
+#define RINGBUF_SIZE 8192
 class InternalJackClient
 {
 
