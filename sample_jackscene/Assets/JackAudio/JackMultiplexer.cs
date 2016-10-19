@@ -30,7 +30,7 @@ namespace JackAudio
     {
 
         // Default unity buffer size per mono block
-        private int BUFFER_SIZE;
+        private int BUFFER_SIZE = 1024;
         public bool useEffects;
 
         [HideInInspector]
