@@ -28,13 +28,14 @@ public class JackSourceSend : MonoBehaviour {
 
     public JackMultiplexer multiplexer;
     public int trackNumber;
-	private const int BUF_SIZE = 1024;
+	private int BUFFER_SIZE;
     private float[] monodata;
 
     public bool IsMuted = false;
 
     void Awake() {
-        monodata = new float[BUF_SIZE]; //this has to be set from options
+        BUFFER_SIZE = multiplexer.GetBufferSize();
+        monodata = new float[BUFFER_SIZE]; //this has to be set from options
         // Check if multiplexer is there, and check if id is unique //
         if (multiplexer == null)
         {
@@ -51,12 +52,12 @@ public class JackSourceSend : MonoBehaviour {
             /* force to mono*/
             if (channels == 2)
             {
-                for (int i = 0,j=0; i < BUF_SIZE; i++,j+=2)
+                for (int i = 0,j=0; i < BUFFER_SIZE; i++,j+=2)
                 {
                     monodata[i] = buffer[j] + buffer[j+1];
                 }
             }
-            System.Array.Copy(monodata, multiplexer.combinedBuffers[trackNumber], BUF_SIZE);
+            System.Array.Copy(monodata, multiplexer.combinedBuffers[trackNumber], BUFFER_SIZE);
         }
         // We need to zero the buffer after copying it,
         // otherwise it will play in unity as well
