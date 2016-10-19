@@ -2,6 +2,7 @@
 
 //#define DEBUG_SINE
 #define TABLE_SIZE 200
+#define RINGBUF_SIZE 8192
 struct UserData {
 	bool is_initialized = false;
 	unsigned long bufferBytes;
@@ -35,8 +36,6 @@ static jack_ringbuffer_t *rbin;
 static unsigned long bufferBytes;
 
 //const int outchannels = 1; // SylR
-
-
 int process(jack_nframes_t nframes, void *arg) {
 	if (!data.is_initialized) {
 		std::cout << "running before init" << std::endl;
@@ -62,9 +61,7 @@ int process(jack_nframes_t nframes, void *arg) {
 		in[ch] = (sample_t *)jack_port_get_buffer(inports[ch], nframes);
 	}
 
-	// stereo data in a mono channel probably makes it slower
-	// we need to deinterleave it
-
+	
 #ifndef DEBUG_SINE
 
     for (int i = 0; i < nframes; i++)
@@ -72,10 +69,10 @@ int process(jack_nframes_t nframes, void *arg) {
 		// IN
 		for (int ch = 0; ch < inchannels; ch++)
 		{
-			jack_ringbuffer_write(rbin, (char *)in[ch], sizeof(jack_default_audio_sample_t));
-			in[ch]++;
+            jack_ringbuffer_write(rbin, (char *)in[ch], sizeof(jack_default_audio_sample_t));
+			in[ch]++;           
 		}
-
+        
 		// OUT
 		for (int ch = 0; ch < outchannels; ch++)
 		{
@@ -131,9 +128,11 @@ int startNativeAudio(int inchannels, int outchannels) {
 	}
 
 	/* create the ringbuffers */
-	rb = jack_ringbuffer_create(outchannels * sizeof(jack_default_audio_sample_t) * 4096);
-	rbin = jack_ringbuffer_create(inchannels * sizeof(jack_default_audio_sample_t) * 4096);
+	rb = jack_ringbuffer_create(outchannels * sizeof(jack_default_audio_sample_t) * RINGBUF_SIZE);
+	rbin = jack_ringbuffer_create(inchannels * sizeof(jack_default_audio_sample_t) * RINGBUF_SIZE);
 
+    // TODO: this might be unnecesary
+    //jack_ringbuffer_mlock(rbin);
 	/* tell the JACK server to call `process()' whenever
 	 there is work to be done.
 	 */

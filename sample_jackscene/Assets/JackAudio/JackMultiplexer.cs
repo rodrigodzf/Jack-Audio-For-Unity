@@ -57,7 +57,10 @@ public class JackMultiplexer : MonoBehaviour {
 		BUFFER_SIZE = GetBufferSize();
     }
 
-    void OnDestroy() { JackWrapper.DestroyJackClient(); }
+    void OnDestroy() { 
+        // if (!useEffects) JackWrapper.DestroyJackClient(); 
+        JackWrapper.DestroyJackClient(); 
+    }
 
 
     void Start() {

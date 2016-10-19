@@ -30,7 +30,8 @@
 #define TESTSHARED_ALIGN(val)
 #endif
 
-#include "UnityNativeAudio.h"
+//#include "UnityNativeAudio.h"
+#include "InternalJackClient.h"
 #include <array>
 
 #define TRACKS 16
@@ -40,13 +41,13 @@ template <typename T, int M, int N> using array2d = std::array<std::array<T, N>,
 namespace TestSharedStack
 {
 
-class TestClass 
+class JackClient 
 {
     
 public:
-    static TestClass& getInstance()
+    static JackClient& getInstance()
     {
-        static TestClass instance; // Guaranteed to be destroyed.
+        static JackClient instance; // Guaranteed to be destroyed.
         // Instantiated on first use.
         return instance;
     }
@@ -59,7 +60,7 @@ public:
         
         if (!initialized) return 0;
 
-        setAudioBuffer(buffer);
+        client->setAudioBuffer(buffer);
         return 0;
     }
     
@@ -85,7 +86,7 @@ public:
 
         // if filled send to ringbuffer, restart index
         if (track == _outputs) {
-            setAudioBuffer(mixedBuffer);
+            client->setAudioBuffer(mixedBuffer);
             track = 0;
         }
         
@@ -94,7 +95,7 @@ public:
     
     void GetAllData(float* buffer) {
         if (!initialized) return;
-        getAudioBuffer(buffer);
+        client->getAudioBuffer(buffer);
     }
     
 
@@ -102,7 +103,7 @@ public:
     
         if (!initialized) return 0;
 
-        getAudioBuffer(mixedBufferIn);
+        client->getAudioBuffer(mixedBufferIn);
         
         for (int i = 0; i < BUFSIZE; i++) {
             buffer[i] = mixedBufferIn[(i * _inputs) + idx];
@@ -117,18 +118,19 @@ public:
             std::cout << "Creating Client " << inputs << " " << outputs << std::endl;
             _inputs = inputs;
             _outputs = outputs;
-            if(startNativeAudio(inputs, outputs) == 0){
-                initialized = true;
-            }
+            client.reset(new InternalJackClient("Unity3D",inputs,outputs));
+            initialized = true;
+
         }
         return initialized;
     }
     
     bool destroyClient()
     {
+        std::cout << "Destroying" << std::endl;
         if (initialized) {
-            stopNativeAudio();
-            initialized = false;
+            initialized = false; // important: initialized flag must be false before resetting the client.
+            client.reset();
         }
         return initialized;
     }
@@ -136,18 +138,19 @@ public:
     
 private:
     
-    TestClass() {
+    JackClient() {
         std::cout << "Trying to create" << std::endl;
     }
     
 
 public:
-    TestClass(TestClass const&) = delete;
-    void operator=(TestClass const&)  = delete;
+    JackClient(JackClient const&) = delete;
+    void operator=(JackClient const&)  = delete;
 
 private:
 
     // TODO: use better this? http://stackoverflow.com/questions/35008089/elegantly-define-multi-dimensional-array-in-modern-c
+    std::unique_ptr<InternalJackClient> client;
     float mixedBuffer[TRACKS * BUFSIZE];
     float mixedBufferIn[TRACKS * BUFSIZE];
     int foo = 5;

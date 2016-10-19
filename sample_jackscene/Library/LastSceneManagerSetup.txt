@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/TestSendReceive.unity
+- path: Assets/Scenes/TestSend.unity
   isLoaded: 1
   isActive: 1

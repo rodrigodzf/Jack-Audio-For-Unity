@@ -41,7 +41,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectSta
     // TODO: this should not be neccesary since we are calling
     // client creation from C#
     // Get unique index on start
-    data->p[P_INDEX] = (float)TestClass::getInstance().GenerateIndex();
+//    data->p[P_INDEX] = (float)JackClient::getInstance().GenerateIndex();
     return UNITY_AUDIODSP_OK;
 }
 
@@ -79,17 +79,17 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectSt
             data->tmpbuffer_out[j++] = inbuffer[i] + inbuffer[i+1];
         }
         
-        TestClass::getInstance().SetData( data->p[P_INDEX], data->tmpbuffer_out);
+        JackClient::getInstance().SetData( data->p[P_INDEX], data->tmpbuffer_out);
 
         
     } else if (inchannels == 1) {
-        TestClass::getInstance().SetData( data->p[P_INDEX], inbuffer );
+        JackClient::getInstance().SetData( data->p[P_INDEX], inbuffer );
     }
 #else
     if (inchannels == 2)
     {
         // upmix
-        TestClass::getInstance().GetData( data->p[P_INDEX], data->tmpbuffer_in);
+        JackClient::getInstance().GetData( data->p[P_INDEX], data->tmpbuffer_in);
 
         for (int i = 0,j=0; i < length * 2; i += 2)
         {
@@ -97,7 +97,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectSt
             outbuffer[i+1] = outbuffer[i];
         }
     } else if (inchannels == 1) {
-        TestClass::getInstance().GetData( data->p[P_INDEX], outbuffer);
+        JackClient::getInstance().GetData( data->p[P_INDEX], outbuffer);
     }
 #endif
     
@@ -128,20 +128,20 @@ int UNITY_AUDIODSP_CALLBACK GetFloatBufferCallback(UnityAudioEffectState* state,
 
 extern "C" UNITY_AUDIODSP_EXPORT_API bool CreateClient(int inputs, int outputs)
 {
-    return TestSharedStack::TestClass::getInstance().createClient(inputs, outputs);
+    return TestSharedStack::JackClient::getInstance().createClient(inputs, outputs);
 }
 extern "C" UNITY_AUDIODSP_EXPORT_API bool DestroyClient()
 {
-    return TestSharedStack::TestClass::getInstance().destroyClient();
+    return TestSharedStack::JackClient::getInstance().destroyClient();
 }
 
 extern "C" UNITY_AUDIODSP_EXPORT_API void GetAllData(float* buffer)
 {
-    TestSharedStack::TestClass::getInstance().GetAllData(buffer);
+    TestSharedStack::JackClient::getInstance().GetAllData(buffer);
 }
 
 extern "C" UNITY_AUDIODSP_EXPORT_API void SetAllData(float* buffer)
 {
-    TestSharedStack::TestClass::getInstance().SetAllData(buffer);
+    TestSharedStack::JackClient::getInstance().SetAllData(buffer);
 }
 
