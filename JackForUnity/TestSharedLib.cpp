@@ -27,7 +27,8 @@
 #endif
 
 #include <stdio.h>
-#include <iostream>
+#include <memory> //for std::unique_ptr
+
 #if UNITY_OSX | UNITY_LINUX
     #include <sys/mman.h>
     #include <sys/types.h>
@@ -38,6 +39,7 @@
     #include <string.h>
 #elif UNITY_WIN
     #include <windows.h>
+	#define _STDINT_H //for jack int definition
 #endif
 
 #if defined(__GNUC__) || defined(__SNC__)
@@ -53,7 +55,7 @@
 #include <array>
 
 #define TRACKS 16
-#define BUFSIZE 512
+#define BUFSIZE 1024
 template <typename T, int M, int N> using array2d = std::array<std::array<T, N>, M>;
 
 namespace TestSharedStack
@@ -81,19 +83,10 @@ public:
         client->setAudioBuffer(buffer);
         return 0;
     }
-    
+	
     int SetData(int idx, float* buffer) {
         
         if (!initialized) return 0;
-        
-        //idx + i*T
-        //  0 + 0*2 = 0
-        //  0 + 1*2 = 2
-        //  0 + 2*2 = 4
-        
-        //  1 + 0*2 = 1
-        //  1 + 1*2 = 3
-        //  1 + 2*2 = 5
         
         for (int i = 0; i < BUFSIZE; i++) {
             mixedBuffer[(i * _outputs) + idx] = buffer[i];
