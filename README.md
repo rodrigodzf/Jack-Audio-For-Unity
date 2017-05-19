@@ -17,6 +17,8 @@ Install the appropiate package for your plattform from the [website](https://git
 
 ## Use
 
+**Make sure Jack is Running first** 
+
 Import the JackAudio.unitypackage in your project and make sure Unity audio settings are the default ones. **The default audio block size is 'Best Performance' or 1024.**
 
 There are two ways of using this plugin. As an audio filter or as an effect.
@@ -26,5 +28,9 @@ As an audio filter component, the JackSourceSend script must be attached to a Ga
 As an 'effect', you can add the 'Jack Send' effect to the appropiate Mixer Group.
 
 Additionally an instance of JackMultiplexer must be present in the Scene at all times.
+
+### Caveats
+
+If the Unity window loses focus then the sound will stop. To prevent this you can check the *Run in Background* checkbox in player settings.
 
 
