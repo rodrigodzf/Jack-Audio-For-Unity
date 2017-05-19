@@ -17,7 +17,11 @@ Install the appropiate package for your plattform from the [website](https://git
 
 ## Use
 
-**Make sure Jack is Running first** 
+**Make sure Jack is Running first**.
+
+Your Jack settings might look similar to these.
+
+![Your Jack settings might look similar to these.](https://github.com/rodrigodzf/Jack-Audio-For-Unity/blob/master/settings.png) 
 
 Import the JackAudio.unitypackage in your project and make sure Unity audio settings are the default ones. **The default audio block size is 'Best Performance' or 1024.**
 
