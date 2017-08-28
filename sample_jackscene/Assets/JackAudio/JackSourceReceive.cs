@@ -28,12 +28,22 @@ public class JackSourceReceive : MonoBehaviour {
 
 	public JackMultiplexer multiplexer;
 	public int IN_PORT;
-	// Use this for initialization
 
-	// Update is called once per frame
-	void Update () {
-	
+	// Hack for 3d spatialization
+	void Awake () {
+		AudioClip _clip = AudioClip.Create("_clip", 1024, 2, 44100, true);
+		float[] samples = new float[1024];
+		for (int i = 0; i < 1024; i++)
+		{
+			samples[i] = 1;
+		}
+		_clip.SetData(samples, 0);
+		
+		AudioSource _source = GetComponent<AudioSource>();
+		_source.clip = _clip;
+		_source.Play();
 	}
+
 	void OnAudioFilterRead (float[] data, int channels) {
 		System.Array.Clear(data, 0, data.Length);
 		if (multiplexer.isRunning()) {
