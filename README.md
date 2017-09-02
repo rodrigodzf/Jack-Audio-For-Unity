@@ -2,14 +2,16 @@
 
 ## Introduction
 
-This library/plugin enables the multichannel audio routing between Unity3D and JackAudio. Simply import the compiled bundle/dll to your project.
+This library/plugin enables multichannel audio routing between Unity3D and JackAudio. Simply import the compiled bundle/dll to your project.
 
 ## Installation
 
 ### Windows
 
-Install Jack and follow the instructions in the [Jack Audio website](http://jackaudio.org/faq/jack_on_windows.html).
-Make sure the JackRouter.dll is registered in your system.
+Install Jack v1.9.11 by following the instructions on the [Jack Audio website](http://jackaudio.org/faq/jack_on_windows.html). 
+Make sure the JackRouter.dll is registered in your system.  
+
+Important: If you want to use a different Jack version, you have to compile the plugin from source by yourself.
 
 ### macOS and Linux
 
