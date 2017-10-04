@@ -3,8 +3,8 @@ PROJECT(UnityJackAudio)
 SET(MACOSX_BUNDLE_BUNDLE_NAME UnityJackAudio)
 ADD_LIBRARY(UnityJackAudio
             MODULE
-            UnityNativeAudio.cpp
-            UnityNativeAudio.h
+            # UnityNativeAudio.cpp
+            # UnityNativeAudio.h
             Plugin_TestShared.cpp
             TestSharedLib.cpp
             AudioPluginUtil.cpp
@@ -28,8 +28,10 @@ if(JACK_FOUND)
 endif()
 include_directories(${JACK_INCLUDE_DIRS})
 TARGET_LINK_LIBRARIES(UnityJackAudio ${JACK_LIBRARIES})
-SET_TARGET_PROPERTIES(UnityJackAudio PROPERTIES MACOSX_BUNDLE TRUE)
-SET_TARGET_PROPERTIES(UnityJackAudio PROPERTIES BUNDLE_EXTENSION "bundle")
-SET_TARGET_PROPERTIES(UnityJackAudio PROPERTIES PREFIX "")
+set_target_properties(UnityJackAudio PROPERTIES BUNDLE TRUE)
+
+# SET_TARGET_PROPERTIES(UnityJackAudio PROPERTIES MACOSX_BUNDLE TRUE)
+# SET_TARGET_PROPERTIES(UnityJackAudio PROPERTIES BUNDLE_EXTENSION "bundle")
+# SET_TARGET_PROPERTIES(UnityJackAudio PROPERTIES PREFIX "")
 # SET_TARGET_PROPERTIES(UnityJackAudio PROPERTIES SUFFIX ".dylib")
 # SET_TARGET_PROPERTIES(UnityJackAudio PROPERTIES SUFFIX ".bundle")

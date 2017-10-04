@@ -53,7 +53,7 @@
 #include "InternalJackClient.h"
 #include <array>
 
-#define TRACKS 16
+// #define TRACKS 16
 #define BUFSIZE 1024
 template <typename T, int M, int N> using array2d = std::array<std::array<T, N>, M>;
 
@@ -129,6 +129,10 @@ public:
             _inputs = inputs;
             _outputs = outputs;
             client.reset(new InternalJackClient("Unity3D",inputs,outputs));
+
+            mixedBuffer = (float*)malloc(_outputs * BUFSIZE * sizeof(float));
+            mixedBufferIn = (float*)malloc(_inputs * BUFSIZE * sizeof(float));
+            
             initialized = true;
 
         }
@@ -141,6 +145,8 @@ public:
         if (initialized) {
             initialized = false; // important: initialized flag must be false before resetting the client.
             client.reset();
+            free(mixedBuffer);
+            free(mixedBufferIn);
         }
         return initialized;
     }
@@ -161,8 +167,11 @@ private:
 
     // TODO: use better this? http://stackoverflow.com/questions/35008089/elegantly-define-multi-dimensional-array-in-modern-c
     std::unique_ptr<InternalJackClient> client;
-    float mixedBuffer[TRACKS * BUFSIZE];
-    float mixedBufferIn[TRACKS * BUFSIZE];
+    // float mixedBuffer[TRACKS * BUFSIZE];
+    // float mixedBufferIn[TRACKS * BUFSIZE];
+    float *mixedBuffer;
+    float *mixedBufferIn;
+
     int foo = 5;
     int track;
     bool initialized;
