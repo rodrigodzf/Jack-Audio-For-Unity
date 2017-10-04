@@ -33,7 +33,7 @@ public class JackSourceSend : MonoBehaviour {
 
     public bool IsMuted = false;
 
-    void Awake() {
+    void Start() {
         BUFFER_SIZE = multiplexer.GetBufferSize();
         monodata = new float[BUFFER_SIZE]; //this has to be set from options
         // Check if multiplexer is there, and check if id is unique //
