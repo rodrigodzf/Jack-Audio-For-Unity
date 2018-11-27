@@ -51,13 +51,13 @@ public class JackWrapper {
     }
 
     #region DllImport
-	[DllImport("AudioPluginDemo")]
+	[DllImport("AudioPlugin-JackAudioForUnity")]
 	private static extern bool CreateClient(int inchannels, int outchannels);
-    [DllImport("AudioPluginDemo")]
+    [DllImport("AudioPlugin-JackAudioForUnity")]
     private static extern bool DestroyClient();
-    [DllImport("AudioPluginDemo")]
+    [DllImport("AudioPlugin-JackAudioForUnity")]
 	private static extern void GetAllData(float[] buffer);
-    [DllImport("AudioPluginDemo")]
+    [DllImport("AudioPlugin-JackAudioForUnity")]
 	private static extern void SetAllData(float[] buffer);
 
     // [DllImport("UnityJackAudio")]
