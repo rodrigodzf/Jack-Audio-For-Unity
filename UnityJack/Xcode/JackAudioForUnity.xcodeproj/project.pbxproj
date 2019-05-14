@@ -41,7 +41,7 @@
 		3D199B5F1858F3E60063EC53 /* AudioPluginUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioPluginUtil.h; path = ../AudioPluginUtil.h; sourceTree = "<group>"; };
 		3D199B6D1858F3E60063EC53 /* PluginList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginList.h; path = ../PluginList.h; sourceTree = "<group>"; };
 		3DA35E0E175F7CA000FA3842 /* AudioPluginInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioPluginInterface.h; path = ../AudioPluginInterface.h; sourceTree = "<group>"; };
-		8D576316048677EA00EA77CD /* AudioPluginDemo.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AudioPluginDemo.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D576316048677EA00EA77CD /* JackAudioForUnity.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JackAudioForUnity.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D576317048677EA00EA77CD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -113,7 +113,7 @@
 		19C28FB6FE9D52B211CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D576316048677EA00EA77CD /* AudioPluginDemo.bundle */,
+				8D576316048677EA00EA77CD /* JackAudioForUnity.bundle */,
 				2FC746C01DB2DD0B00BF70AF /* TestPlugin */,
 			);
 			name = Products;
@@ -162,7 +162,7 @@
 			name = Jack;
 			productInstallPath = "$(HOME)/Library/Bundles";
 			productName = AudioPluginDemo;
-			productReference = 8D576316048677EA00EA77CD /* AudioPluginDemo.bundle */;
+			productReference = 8D576316048677EA00EA77CD /* JackAudioForUnity.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -178,7 +178,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 1DEB911E08733D790010E9CD /* Build configuration list for PBXProject "AudioPluginDemo" */;
+			buildConfigurationList = 1DEB911E08733D790010E9CD /* Build configuration list for PBXProject "JackAudioForUnity" */;
 			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -235,7 +235,7 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				DEPLOYMENT_LOCATION = YES;
-				DSTROOT = "$(PROJECT_DIR)/../../sample_jackscene/Assets";
+				DSTROOT = "$(PROJECT_DIR)/../../sample_jackscene/Assets/Plugins";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -253,7 +253,8 @@
 					/usr/local/lib,
 				);
 				OTHER_LDFLAGS = "-ljack";
-				PRODUCT_NAME = AudioPluginDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.JackAudioForUnity;
+				PRODUCT_NAME = JackAudioForUnity;
 				SKIP_INSTALL = NO;
 				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/AudioUnitExamples/AUPublic/AUBase $(PROJECT_DIR)/AudioUnitExamples/AUPublic/OtherBases $(PROJECT_DIR)/AudioUnitExamples/AUPublic/Utility $(PROJECT_DIR)/AudioUnitExamples/PublicUtility";
 				WRAPPER_EXTENSION = bundle;
@@ -265,7 +266,7 @@
 			buildSettings = {
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEPLOYMENT_LOCATION = YES;
-				DSTROOT = "$(PROJECT_DIR)/../../sample_jackscene/Assets";
+				DSTROOT = "$(PROJECT_DIR)/../../sample_jackscene/Assets/Plugins";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_MODEL_TUNING = G5;
 				HEADER_SEARCH_PATHS = (
@@ -280,7 +281,8 @@
 					/usr/local/lib,
 				);
 				OTHER_LDFLAGS = "-ljack";
-				PRODUCT_NAME = AudioPluginDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.JackAudioForUnity;
+				PRODUCT_NAME = JackAudioForUnity;
 				SKIP_INSTALL = NO;
 				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/AudioUnitExamples/AUPublic/AUBase $(PROJECT_DIR)/AudioUnitExamples/AUPublic/OtherBases $(PROJECT_DIR)/AudioUnitExamples/AUPublic/Utility $(PROJECT_DIR)/AudioUnitExamples/PublicUtility";
 				WRAPPER_EXTENSION = bundle;
@@ -416,7 +418,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		1DEB911E08733D790010E9CD /* Build configuration list for PBXProject "AudioPluginDemo" */ = {
+		1DEB911E08733D790010E9CD /* Build configuration list for PBXProject "JackAudioForUnity" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB911F08733D790010E9CD /* Debug */,

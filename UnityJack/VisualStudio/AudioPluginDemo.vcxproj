@@ -20,8 +20,10 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F7CFEF5A-54BD-42E8-A59E-54ABAEB4EA9C}</ProjectGuid>
-    <RootNamespace>AudioPluginDemo</RootNamespace>
+    <RootNamespace>JackAudioForUnity</RootNamespace>
     <Keyword>Win32Proj</Keyword>
+    <ProjectName>JackAudioForUnity</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -64,18 +66,30 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)build\$(Configuration)\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)build\$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)build\$(Configuration)\$(Platform)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)build\$(Configuration)\$(Platform)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">build\$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">build\$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)build\$(Configuration)\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)build\$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)build\$(Configuration)\$(Platform)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)build\$(Configuration)\$(Platform)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">build\$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">build\$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetName>AudioPlugin-$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetName>AudioPlugin-$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>AudioPlugin-$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>AudioPlugin-$(ProjectName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -98,8 +112,7 @@
     </Link>
     <PostBuildEvent>
       <Command>mkdir ..\..\sample_jackscene\Assets\Plugins\x86
-copy "$(TargetPath)" ..\..\sample_jackscene\Assets\Plugins\x86\$(TargetName).dll
-</Command>
+copy /y "$(TargetPath)" ..\..\sample_jackscene\Assets\Plugins\x86\$(TargetName).dll</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -123,8 +136,7 @@ copy "$(TargetPath)" ..\..\sample_jackscene\Assets\Plugins\x86\$(TargetName).dll
     </Link>
     <PostBuildEvent>
       <Command>mkdir ..\..\sample_jackscene\Assets\Plugins\x86_64
-copy /y "$(TargetPath)" ..\..\sample_jackscene\Assets\Plugins\x86_64\$(TargetName).dll
-</Command>
+copy /y "$(TargetPath)" ..\..\sample_jackscene\Assets\Plugins\x86_64\$(TargetName).dll</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -154,8 +166,7 @@ copy /y "$(TargetPath)" ..\..\sample_jackscene\Assets\Plugins\x86_64\$(TargetNam
     </Link>
     <PostBuildEvent>
       <Command>mkdir ..\..\sample_jackscene\Assets\Plugins\x86
-copy "$(TargetPath)"  ..\..\sample_jackscene\Assets\Plugins\x86\$(TargetName).dll
-</Command>
+copy /y "$(TargetPath)" ..\..\sample_jackscene\Assets\Plugins\x86\$(TargetName).dll</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -185,9 +196,8 @@ copy "$(TargetPath)"  ..\..\sample_jackscene\Assets\Plugins\x86\$(TargetName).dl
       <AdditionalDependencies>kernel32.lib;user32.lib;winmm.lib;C:\Program Files (x86)\Jack\lib\libjack64.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir  ..\..\sample_jackscene\Assets\Plugins\x86_64
-copy /y "$(TargetPath)" ..\..\sample_jackscene\Assets\Plugins\x86_64\$(TargetName).dll
-</Command>
+      <Command>mkdir ..\..\sample_jackscene\Assets\Plugins\x86_64
+copy /y "$(TargetPath)" ..\..\sample_jackscene\Assets\Plugins\x86_64\$(TargetName).dll</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
