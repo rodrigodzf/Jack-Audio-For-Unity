@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2016  Rodrigo Diaz
+// Copyright (C) 2016  Rodrigo Diaz
 // 
 // This file is part of JackAudioUnity.
 // 
@@ -51,7 +51,17 @@ public class JackWrapper {
     }
 
     #region DllImport
-	[DllImport("AudioPlugin-JackAudioForUnity")]
+    #if UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
+	[DllImport("JackAudioForUnity")]
+	private static extern bool CreateClient(int inchannels, int outchannels);
+    [DllImport("JackAudioForUnity")]
+    private static extern bool DestroyClient();
+    [DllImport("JackAudioForUnity")]
+	private static extern void GetAllData(float[] buffer);
+    [DllImport("JackAudioForUnity")]
+	private static extern void SetAllData(float[] buffer);
+    #else
+    [DllImport("AudioPlugin-JackAudioForUnity")]
 	private static extern bool CreateClient(int inchannels, int outchannels);
     [DllImport("AudioPlugin-JackAudioForUnity")]
     private static extern bool DestroyClient();
@@ -59,7 +69,7 @@ public class JackWrapper {
 	private static extern void GetAllData(float[] buffer);
     [DllImport("AudioPlugin-JackAudioForUnity")]
 	private static extern void SetAllData(float[] buffer);
-
+    #endif
     // [DllImport("UnityJackAudio")]
     // public static extern void SetDebugFunction(IntPtr fp);
     // [DllImport("UnityJackAudio")]
