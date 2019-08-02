@@ -1,10 +1,30 @@
-cmake_minimum_required(VERSION 3.5)
-PROJECT(UnityJackAudio)
-SET(MACOSX_BUNDLE_BUNDLE_NAME UnityJackAudio)
-ADD_LIBRARY(UnityJackAudio
+cmake_minimum_required(VERSION 3.14)
+
+project(UnityJackAudio)
+
+# set verbose compile options
+set( CMAKE_VERBOSE_MAKEFILE ON )
+
+# find modules
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake-modules" ${CMAKE_MODULE_PATH})
+include(${CMAKE_SOURCE_DIR}/cmake-modules/utilities.cmake)
+
+find_package(JACK REQUIRED)
+if(JACK_FOUND)
+    message(STATUS "JACK_INCLUDE_DIRS: ${JACK_INCLUDE_DIR}")
+    message(STATUS "JACK_LIBRARIES: ${JACK_LIBRARY}")
+    message(STATUS "JACK_VERSION: ${JACK_VERSION}")
+endif()
+
+
+# library
+set( LIB_NAME UnityJackAudio )
+
+# create upper case name
+string( TOUPPER ${LIB_NAME} LIB_NAME_UC )
+
+add_library(${LIB_NAME}
             MODULE
-            # UnityNativeAudio.cpp
-            # UnityNativeAudio.h
             Plugin_TestShared.cpp
             TestSharedLib.cpp
             AudioPluginUtil.cpp
@@ -12,23 +32,10 @@ ADD_LIBRARY(UnityJackAudio
             AudioPluginInterface.h
             PluginList.h)
 
-SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/../../sample_jackscene/Assets/Plugins)
-
-
-SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake-modules")
-include(${CMAKE_SOURCE_DIR}/cmake-modules/utilities.cmake)
-# SET(CMAKE_SHARED_LINKER_FLAGS "-ljack")
-
-
-FIND_PACKAGE(JACK REQUIRED)
-if(JACK_FOUND)
-    message(STATUS "JACK_INCLUDE_DIRS: ${JACK_INCLUDE_DIRS}")
-    message(STATUS "JACK_LIBRARIES: ${JACK_LIBRARIES}")
-    message(STATUS "JACK_VERSION: ${JACK_VERSION}")
-endif()
-include_directories(${JACK_INCLUDE_DIRS})
-TARGET_LINK_LIBRARIES(UnityJackAudio ${JACK_LIBRARIES})
-set_target_properties(UnityJackAudio PROPERTIES BUNDLE TRUE)
+target_link_options(${LIB_NAME} PUBLIC -rdynamic)
+target_include_directories(${LIB_NAME} PUBLIC ${JACK_INCLUDE_DIR})
+target_link_libraries(${LIB_NAME} PUBLIC ${JACK_LIBRARY})
+# set_target_properties(${LIB_NAME} PROPERTIES BUNDLE TRUE)
 
 # SET_TARGET_PROPERTIES(UnityJackAudio PROPERTIES MACOSX_BUNDLE TRUE)
 # SET_TARGET_PROPERTIES(UnityJackAudio PROPERTIES BUNDLE_EXTENSION "bundle")
