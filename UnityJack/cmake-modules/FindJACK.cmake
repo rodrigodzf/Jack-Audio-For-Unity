@@ -50,11 +50,8 @@ find_library(JACK_LIBRARY NAMES jack
 # handle the QUIETLY and REQUIRED arguments and set JACK_FOUND to TRUE if
 # all listed variables are TRUE
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(JACK REQUIRED_VARS JACK_LIBRARY JACK_INCLUDE_DIR)
-
-if(JACK_FOUND)
-    set(JACK_LIBRARIES ${JACK_LIBRARY})
-    set(JACK_INCLUDE_DIRS ${JACK_INCLUDE_DIR})
-endif()
+find_package_handle_standard_args(JACK
+                                  REQUIRED_VARS JACK_LIBRARY JACK_INCLUDE_DIR
+                                  VERSION_VAR JACK_VERSION)
 
 mark_as_advanced(JACK_INCLUDE_DIR JACK_LIBRARY)
