@@ -1,17 +1,29 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using System;
+
+namespace JackAudio
+{
+
 public class JackEditorWindow : EditorWindow
 {
-    string myString = "Hello World";
     bool groupEnabled;
-    bool myBool = true;
-    float myFloat = 1.23f;
+    int inputs = 2;
+    int outputs = 2;
+
+    static int numbuffers;
+    static int buffersize;
+    static AudioConfiguration config;
 
     static bool bInitialized = false;
     // Add menu named "My Window" to the Window menu
     [MenuItem("Window/Jack")]
     static void Init()
     {
+
+        AudioSettings.GetDSPBufferSize(out buffersize, out numbuffers);
+        config = AudioSettings.GetConfiguration();
+
         // Get existing open window or if none, make a new one:
         JackEditorWindow window = (JackEditorWindow)EditorWindow.GetWindow(typeof(JackEditorWindow));
         window.Show();
@@ -26,25 +38,21 @@ public class JackEditorWindow : EditorWindow
                 GUILayout.EndVertical();
                 GUI.backgroundColor = Color.white;
         } else GUILayout.Space(8);
-        if( GUILayout.Button("Connect to Jack Server")){
-            // try to connect
-            if (!bInitialized){
-                // setup
-            }
+        if( GUILayout.Button("Connect to Jack Server"))
+        {   
+            Debug.Log("buffersize: " + buffersize);
+            bInitialized = JackWrapper.StartJackClient((uint)buffersize, (uint)inputs, (uint)outputs);
+        }
 
-            // bInitialized = sucess
-            // check state
-        }
-        Debug.Log(bInitialized);
-        if (bInitialized){
-            
-        }
         GUILayout.Label("Base Settings", EditorStyles.boldLabel);
-        myString = EditorGUILayout.TextField("Text Field", myString);
+        inputs = EditorGUILayout.IntField("Inputs", inputs);
+        outputs = EditorGUILayout.IntField("Outputs", outputs);
 
         groupEnabled = EditorGUILayout.BeginToggleGroup("Optional Settings", groupEnabled);
-        myBool = EditorGUILayout.Toggle("Toggle", myBool);
-        myFloat = EditorGUILayout.Slider("Slider", myFloat, -3, 3);
+        // inputs = EditorGUILayout.IntField("Inputs", inputs);
+        // outputs = EditorGUILayout.IntField("Outputs", outputs);
         EditorGUILayout.EndToggleGroup();
     }
+}
+
 }

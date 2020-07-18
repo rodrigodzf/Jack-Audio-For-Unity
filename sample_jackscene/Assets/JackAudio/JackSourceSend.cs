@@ -28,7 +28,7 @@ public class JackSourceSend : MonoBehaviour {
 
     public JackMultiplexer multiplexer;
     public int trackNumber;
-	private int BUFFER_SIZE;
+	private uint BUFFER_SIZE;
     private float[] monodata;
 
     public bool IsMuted = false;

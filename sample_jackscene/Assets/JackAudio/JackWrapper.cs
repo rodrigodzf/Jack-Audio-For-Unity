@@ -24,16 +24,15 @@ using System.Runtime.InteropServices;
 namespace JackAudio
 {
 
+    public delegate void LogCallback(int level, IntPtr log);
+
 public class JackWrapper {
 
-    static public void StartJackClient(int inchannels, int outchannels)
+    static public bool StartJackClient(uint bufferSize, uint inchannels, uint outchannels)
     {
-        Debug.Log("Starting Jack");
-        if (!CreateClient(inchannels, outchannels)) {
-            Debug.LogError("Jack Server not online");
-        }
-
+        return CreateClient(bufferSize, inchannels, outchannels);
     }
+    
     static public void DestroyJackClient()
     {
         Debug.Log("Disabling Jack");
@@ -52,46 +51,26 @@ public class JackWrapper {
 
     #region DllImport
     #if UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
-	[DllImport("JackAudioForUnity")]
-	private static extern bool CreateClient(int inchannels, int outchannels);
-    [DllImport("JackAudioForUnity")]
-    private static extern bool DestroyClient();
-    [DllImport("JackAudioForUnity")]
-	private static extern void GetAllData(float[] buffer);
-    [DllImport("JackAudioForUnity")]
-	private static extern void SetAllData(float[] buffer);
+        [DllImport("JackAudioForUnity")]
+        private static extern bool CreateClient(uint bufferSize, uint inchannels, uint outchannels);
+        [DllImport("JackAudioForUnity")]
+        private static extern bool DestroyClient();
+        [DllImport("JackAudioForUnity")]
+        private static extern void GetAllData(float[] buffer);
+        [DllImport("JackAudioForUnity")]
+        private static extern void SetAllData(float[] buffer);
     #else
-    [DllImport("AudioPlugin-JackAudioForUnity")]
-	private static extern bool CreateClient(int inchannels, int outchannels);
-    [DllImport("AudioPlugin-JackAudioForUnity")]
-    private static extern bool DestroyClient();
-    [DllImport("AudioPlugin-JackAudioForUnity")]
-	private static extern void GetAllData(float[] buffer);
-    [DllImport("AudioPlugin-JackAudioForUnity")]
-	private static extern void SetAllData(float[] buffer);
+        [DllImport("UnityJackAudio")]
+        private static extern bool CreateClient(uint bufferSize, uint inchannels, uint outchannels);
+        [DllImport("UnityJackAudio")]
+        private static extern bool DestroyClient();
+        [DllImport("UnityJackAudio")]
+        private static extern void GetAllData(float[] buffer);
+        [DllImport("UnityJackAudio")]
+        private static extern void SetAllData(float[] buffer);
+        [DllImport("UnityJackAudio", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void RegisterLogCallback(LogCallback buffer);
     #endif
-    // [DllImport("UnityJackAudio")]
-    // public static extern void SetDebugFunction(IntPtr fp);
-    // [DllImport("UnityJackAudio")]
-    // private static extern int startNativeAudio(int inchannels, int outchannels);
-    // [DllImport("UnityJackAudio")]
-    // private static extern void stopNativeAudio();
-    // [DllImport("UnityJackAudio")]
-    // private static extern int getAudioBuffer(ref float buffer);
-    // [DllImport("UnityJackAudio")]
-    // private static extern int setAudioBuffer(ref float buffer);
-    // [DllImport("UnityJackAudio")]
-    // private static extern string getAudioDeviceName(uint deviceId);
-    // [DllImport("UnityJackAudio")]
-    // private static extern uint getAudioDeviceCount();
-    // [DllImport("UnityJackAudio")]
-    // private static extern uint getDefaultAudioDevice();
-    // [DllImport("UnityJackAudio")]
-    // private static extern uint getAudioInputChannels(uint deviceId);
-    // [DllImport("UnityJackAudio")]
-    // private static extern uint getSampleRate();
-    // [DllImport("UnityJackAudio")]
-    // private static extern uint getBufferFrames();
     #endregion
 
 }
