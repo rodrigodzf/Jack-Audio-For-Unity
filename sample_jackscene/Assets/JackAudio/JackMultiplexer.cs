@@ -21,6 +21,9 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using System.Collections;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System;
+using AOT;
 
 
 namespace JackAudio
@@ -30,7 +33,7 @@ namespace JackAudio
     {
 
         // Default unity buffer size per mono block
-        private int BUFFER_SIZE = 1024;
+        private uint BUFFER_SIZE = 1024;
         public bool useEffects;
 
         [HideInInspector]
@@ -41,20 +44,38 @@ namespace JackAudio
 
         private bool started = false;
 
-        public int INPUTS;
-        public int OUTPUTS;
+        public uint INPUTS;
+        public uint OUTPUTS;
         // 
         private JackSourceSend[] outSources;
         private JackSourceReceive[] inSources;
 
-        public int GetBufferSize()
+        public uint GetBufferSize()
         {
             return BUFFER_SIZE;
         }
+
+        [MonoPInvokeCallback(typeof(LogCallback))]
+        static void OnLogCallback(int level, IntPtr log)
+        {
+            string debug_string = Marshal.PtrToStringAuto(log);
+            UnityEngine.Debug.Log(debug_string);
+        }
+
+        // Use this for initialization
+        void OnEnable()
+        {
+            JackWrapper.RegisterLogCallback(OnLogCallback);
+        }
+
+
         void Awake()
         {
             int numbuffers;
-            AudioSettings.GetDSPBufferSize(out BUFFER_SIZE, out numbuffers);
+            int buffersize;
+            AudioSettings.GetDSPBufferSize(out buffersize, out numbuffers);
+
+            BUFFER_SIZE = (uint)buffersize;
         }
 
         void OnDestroy()
@@ -95,7 +116,7 @@ namespace JackAudio
             mixedBufferIn = new float[INPUTS * BUFFER_SIZE];
 
             // Start Engine
-            JackWrapper.StartJackClient(INPUTS, OUTPUTS);
+            JackWrapper.StartJackClient(BUFFER_SIZE, INPUTS, OUTPUTS);
             started = true;
         }
 
