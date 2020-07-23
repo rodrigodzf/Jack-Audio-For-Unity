@@ -24,24 +24,20 @@ namespace AudioPluginJack
 
 enum Param
 {
-  P_PARAM1,
-  P_INDEX,
-  P_NUM
+  PORT,
+  LAST
 };
 
 struct EffectData
 {
-  float p[P_NUM];
-  float tmpbuffer_in[1024];
-  float tmpbuffer_out[1024];
+  float params[LAST];
 };
 
 int InternalRegisterEffectDefinition( UnityAudioEffectDefinition& definition )
 {
-  int numparams        = P_NUM;
+  int numparams        = LAST;
   definition.paramdefs = new UnityAudioParameterDefinition[numparams];
-  RegisterParameter( definition, "INDEX", "", 0.0f, 64.0f, 0.0f, 1.0f, 1.0f, P_INDEX, "User-defined parameter 1 (read/write)" );
-  RegisterParameter( definition, "VOL", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, P_PARAM1, "User-defined parameter 1 (read/write)" );
+  RegisterParameter( definition, "Port", "", 0.0f, 64.0f, 0.0f, 1.0f, 1.0f, PORT, "Jack port" );
   return numparams;
 }
 
@@ -50,7 +46,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback( UnityAudioEffectSt
   EffectData* data = new EffectData;
   memset( data, 0, sizeof( EffectData ) );
   state->effectdata = data;
-  InitParametersFromDefinitions( InternalRegisterEffectDefinition, data->p );
+  InitParametersFromDefinitions( InternalRegisterEffectDefinition, data->params );
   return UNITY_AUDIODSP_OK;
 }
 
@@ -65,16 +61,31 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback( UnityAudioEffectS
                                                                float* inbuffer,
                                                                float* outbuffer,
                                                                unsigned int length,
-                                                               int /*inchannels*/,
+                                                               int inchannels,
                                                                int outchannels )
 {
   EffectData* data = state->GetEffectData<EffectData>();
-  for ( unsigned int n = 0; n < length; n++ )
+
+  // verify we have the same buffersize in unity and in jack
+  if ( length != JackClient::getInstance().get_buffer_size() )
   {
-    for ( int i = 0; i < outchannels; i++ )
+    return UNITY_AUDIODSP_ERR_UNSUPPORTED;
+  }
+
+  // if we receive stereo we use only the left channel, since jack ports are only mono
+  // otherwise pass the original buffer
+  if ( inchannels == 2 )
+  {
+    std::vector<float> mono(length);
+    for ( unsigned int i = 0, j = 0; i < length; i++, j += 2 )
     {
-      outbuffer[n * outchannels + i] = inbuffer[n * outchannels + i] * data->p[P_PARAM1];
+      mono[i] = inbuffer[j];
     }
+    JackClient::getInstance().write_buffer( data->params[PORT], mono.data(), length );
+  }
+  else if ( inchannels == 1 )
+  {
+    JackClient::getInstance().write_buffer( data->params[PORT], inbuffer, length );
   }
   return UNITY_AUDIODSP_OK;
 }
@@ -82,13 +93,13 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback( UnityAudioEffectS
 UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback( UnityAudioEffectState* state, int index, float value )
 {
   EffectData* data = state->GetEffectData<EffectData>();
-  data->p[index]   = value;
+  data->params[index]   = value;
   return UNITY_AUDIODSP_OK;
 }
 UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK GetFloatParameterCallback( UnityAudioEffectState* state, int index, float* value, char* )
 {
   EffectData* data = state->GetEffectData<EffectData>();
-  if ( value != NULL ) *value = data->p[index];
+  if ( value != NULL ) *value = data->params[index];
   return UNITY_AUDIODSP_OK;
 }
 int UNITY_AUDIODSP_CALLBACK GetFloatBufferCallback( UnityAudioEffectState*, const char*, float*, int ) { return UNITY_AUDIODSP_OK; }

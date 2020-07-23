@@ -25,10 +25,6 @@
 namespace AudioPluginJack
 {
 
-/**
- * @brief The stream class is backed by a ringbuffer
- *
- */
 class Stream
 {
 
@@ -47,7 +43,6 @@ public:
 
   size_t write( sample_t* buffer, const size_t size )
   {
-    // jack_ringbuffer_write writes the size in sample size NOT bytes
     if ( jack_ringbuffer_write_space(ring_buffer) > 0 )
     {
       return jack_ringbuffer_write(ring_buffer, (char*)buffer, size * sizeof(sample_t) );

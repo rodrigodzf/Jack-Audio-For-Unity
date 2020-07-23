@@ -20,16 +20,38 @@ using UnityEngine;
 using System.Collections;
 using System;
 using System.Runtime.InteropServices;
+using AOT;
 
 namespace JackAudio
 {
+
     public delegate void LogCallback(int level, IntPtr log);
+
+public class JackLogger {
+
+    static bool installed = false;
+
+    [MonoPInvokeCallback(typeof(LogCallback))]
+    static void OnLogCallback(int level, IntPtr log)
+    {
+        string debug_string = Marshal.PtrToStringAuto(log);
+        UnityEngine.Debug.Log(debug_string);
+    }
+
+    public static void Initialize()
+    {
+        if ( !installed )
+        {
+            JackWrapper.RegisterLogCallback(OnLogCallback);
+            installed = true;
+        }
+    }
+}
 
 public class JackWrapper {
 
     [DllImport("AudioPluginJack")]
-    public static extern bool CreateClient(uint bufferSize,
-                                           uint sampleRate);
+    public static extern bool CreateClient(uint bufferSize, uint sampleRate);
     [DllImport("AudioPluginJack")]
     public static extern bool ActivateClient();
     [DllImport("AudioPluginJack")]
