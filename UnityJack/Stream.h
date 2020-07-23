@@ -29,13 +29,14 @@ class Stream
 {
 
 public:
-  Stream( const size_t size = 1024 )
+  Stream( const size_t size = 4096 )
   { 
     ring_buffer = jack_ringbuffer_create(sizeof(sample_t) * size);
   }
 
   ~Stream()
   {
+    jack_ringbuffer_reset(ring_buffer);
     jack_ringbuffer_free(ring_buffer);
   }
 
@@ -43,7 +44,7 @@ public:
 
   size_t write( sample_t* buffer, const size_t size )
   {
-    if ( jack_ringbuffer_write_space(ring_buffer) > 0 )
+    if ( jack_ringbuffer_write_space(ring_buffer) >= size * sizeof(sample_t) )
     {
       return jack_ringbuffer_write(ring_buffer, (char*)buffer, size * sizeof(sample_t) );
     }
@@ -52,7 +53,7 @@ public:
 
   size_t read( sample_t* buffer, const size_t size )
   {
-    if( jack_ringbuffer_read_space(ring_buffer) > 0 )
+    if( jack_ringbuffer_read_space(ring_buffer) >= size * sizeof(sample_t) )
     {
       return jack_ringbuffer_read(ring_buffer, (char*)buffer, size * sizeof(sample_t) );
     }
