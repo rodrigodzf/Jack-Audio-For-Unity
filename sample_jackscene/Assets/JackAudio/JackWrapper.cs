@@ -28,14 +28,18 @@ namespace JackAudio
 
 public class JackWrapper {
 
-    static public bool StartJackClient(uint bufferSize, uint inchannels, uint outchannels)
+    static public bool StartJackClient(uint bufferSize,
+                                       uint sampleRate,
+                                       uint inchannels,
+                                       uint outchannels)
     {
-        return CreateClient(bufferSize, inchannels, outchannels);
+        CreateClient(bufferSize, sampleRate);
+        RegisterPorts(inchannels, outchannels);
+        return true;
     }
     
     static public void DestroyJackClient()
     {
-        Debug.Log("Disabling Jack");
         DestroyClient();
     }
 
@@ -49,30 +53,18 @@ public class JackWrapper {
         GetAllData(buffer);
     }
 
-    #region DllImport
-    #if UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
-        [DllImport("JackAudioForUnity")]
-        private static extern bool CreateClient(uint bufferSize, uint inchannels, uint outchannels);
-        [DllImport("JackAudioForUnity")]
-        private static extern bool DestroyClient();
-        [DllImport("JackAudioForUnity")]
-        private static extern void GetAllData(float[] buffer);
-        [DllImport("JackAudioForUnity")]
-        private static extern void SetAllData(float[] buffer);
-    #else
-        [DllImport("UnityJackAudio")]
-        private static extern bool CreateClient(uint bufferSize, uint inchannels, uint outchannels);
-        [DllImport("UnityJackAudio")]
-        private static extern bool DestroyClient();
-        [DllImport("UnityJackAudio")]
-        private static extern void GetAllData(float[] buffer);
-        [DllImport("UnityJackAudio")]
-        private static extern void SetAllData(float[] buffer);
-        [DllImport("UnityJackAudio", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void RegisterLogCallback(LogCallback buffer);
-    #endif
-    #endregion
-
+    [DllImport("UnityJackAudio")]
+    private static extern bool CreateClient(uint bufferSize, uint sampleRate);
+    [DllImport("UnityJackAudio")]
+    private static extern bool DestroyClient();
+    [DllImport("UnityJackAudio")]
+    private static extern bool RegisterPorts( uint inputs, uint outputs );
+    [DllImport("UnityJackAudio")]
+    private static extern void WriteBuffer( int channel, float[] buffer, int size );
+    [DllImport("UnityJackAudio")]
+    private static extern void ReadBuffer( int channel, float[] buffer, int size );
+    [DllImport("UnityJackAudio", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void RegisterLogCallback(LogCallback buffer);
 }
 
 }

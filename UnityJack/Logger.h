@@ -24,7 +24,7 @@
 // Logger callback
 extern "C" typedef void ( *LogCallback )( int, const char* );
 
-namespace UnityJackAudio
+namespace AudioPluginJack
 {
 
 static LogCallback mLogCallback = nullptr;
@@ -39,7 +39,7 @@ public:
     ERROR   = 2
   };
 
-  void RegisterLogCallback( LogCallback callback ) { mLogCallback = callback; }
+  void register_log_callback( LogCallback callback ) { mLogCallback = callback; }
 
 public:
   static void log( const eLogType level, const std::string &msg )
