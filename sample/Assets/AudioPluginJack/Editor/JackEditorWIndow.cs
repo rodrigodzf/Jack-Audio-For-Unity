@@ -40,7 +40,7 @@ namespace JackAudio
         AudioSettings.GetDSPBufferSize(out bufferSize, out numbuffers);
         AudioConfiguration config = AudioSettings.GetConfiguration();
 
-
+        JackLogger.Initialize();
         JackWrapper.CreateClient((uint)bufferSize,
                                  (uint)config.sampleRate);
         JackWrapper.RegisterPorts((uint)inputs, (uint)outputs);

@@ -160,7 +160,7 @@ public:
       }
       
       // make sure we are dealing with the same buffer size and sample rate
-      nframes_t current_buffer_size = jack_get_buffer_size( client );
+      current_buffer_size = jack_get_buffer_size( client );
       if ( buffer_size != current_buffer_size )
       {
         LOG("Invalid buffersize");
@@ -205,6 +205,15 @@ public:
     return false;
   }
 
+  int get_buffer_size()
+  {
+    if ( activated )
+    {
+      return current_buffer_size;
+    }
+    return 0;
+  }
+
 private:
   JackClient()
   {
@@ -221,13 +230,18 @@ public:
     if ( 0 == buffer_size ) { return -1; }
     JackClient* jack_client = ( JackClient* )arg;
     if ( !jack_client->activated ) { return -1; }
-
+    if ( jack_client->input_streams.size() != jack_client->inputs ) { return -1; }
+    if ( jack_client->input_ports.size() != jack_client->inputs ) { return -1; }
+    if ( jack_client->output_streams.size() != jack_client->outputs ) { return -1; }
+    if ( jack_client->output_ports.size() != jack_client->outputs ) { return -1; }
+    
     // get the input and output buffers
     for ( unsigned int i = 0; i < jack_client->inputs; i++ )
     {
       sample_t *in = static_cast<sample_t*>(jack_port_get_buffer( jack_client->input_ports[i], buffer_size ));
       jack_client->input_streams[i]->write(in, buffer_size);
     }
+
     for ( unsigned int i = 0; i < jack_client->outputs; i++ )
     {
       sample_t *out = static_cast<sample_t*>(jack_port_get_buffer( jack_client->output_ports[i], buffer_size ));
@@ -261,7 +275,7 @@ private:
 
   unsigned int inputs     = 0;
   unsigned int outputs    = 0;
-
+  nframes_t current_buffer_size = 0;
   std::unique_ptr<Logger> logger;
 
   std::mutex mutex;

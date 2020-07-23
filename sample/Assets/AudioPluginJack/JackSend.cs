@@ -1,58 +1,42 @@
 ﻿using System.Collections;
-using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using UnityEngine;
-using AOT;
-using System;
 
 namespace JackAudio
 {
 
-public class JackSend : MonoBehaviour
-{
+  public class JackSend : MonoBehaviour
+  {
+    public int port = 0;
+    private bool started = false;
     private float[] monodata;
+    private int bufferSize = 1024;
 
-    [MonoPInvokeCallback(typeof(LogCallback))]
-    static void OnLogCallback(int level, IntPtr log)
-    {
-        string debug_string = Marshal.PtrToStringAuto(log);
-        UnityEngine.Debug.Log(debug_string);
-    }
 
-    void OnEnable()
-    {
-        JackWrapper.RegisterLogCallback(OnLogCallback);
-    }
-    
-    // Start is called before the first frame update
     void Start()
     {
-        monodata = new float[1024]; //this has to be set from options
-        StartJack();
+      monodata = new float[1024]; //this has to be set from options
+      System.Array.Clear(monodata, 0, monodata.Length);
+      started = true;
     }
 
     void OnDestroy()
     {
-        // JackWrapper.DestroyClient();
+      System.Array.Clear(monodata, 0, 1024);
+      JackWrapper.WriteBuffer(port, monodata, 1024);
     }
 
     void OnAudioFilterRead(float[] buffer, int channels)
     {
-        // Debug.Log(buffer.Length);
-        // to find the number of samples per channel, divide data.Length by channels
-        int bufferSize = buffer.Length / channels;
-        if (channels == 2)
-        {
-            for (int i = 0,j=0; i < bufferSize; i++,j+=2)
-            {
-                monodata[i] = buffer[j];
-            }
-        }
+      if (!started) { return; }
+      if (buffer.Length != bufferSize) { Debug.LogError("buffer size does not match jack"); return; }
+      if (channels != 1) { Debug.LogError("jack can only accept mono"); return; }
 
-        JackWrapper.WriteBuffer(0, monodata, bufferSize);
-        System.Array.Clear(buffer, 0, buffer.Length);
+      // It is neccesary to make a copy here because the data is managed and will be deleted
+      // after the call is finished or before
+      System.Array.Copy(buffer, monodata, buffer.Length);
+      JackWrapper.WriteBuffer(port, monodata, monodata.Length);
+      System.Array.Clear(buffer, 0, buffer.Length);
     }
-
-}
-
+  }
 }
