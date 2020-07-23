@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(UnityJackAudio)
+project(AudioPluginJack)
 
 # set verbose compile options
 set( CMAKE_VERBOSE_MAKEFILE ON )
@@ -18,15 +18,15 @@ endif()
 
 
 # library
-set( LIB_NAME UnityJackAudio )
+set(LIB_NAME AudioPluginJack)
 
 # create upper case name
 string( TOUPPER ${LIB_NAME} LIB_NAME_UC )
 
 add_library(${LIB_NAME}
             MODULE
-            Plugin_TestShared.cpp
-            TestSharedLib.cpp
+            Plugin.cpp
+            JackClient.h
             AudioPluginUtil.cpp
             AudioPluginUtil.h
             AudioPluginInterface.h
@@ -35,7 +35,13 @@ add_library(${LIB_NAME}
 target_link_options(${LIB_NAME} PUBLIC -rdynamic)
 target_include_directories(${LIB_NAME} PUBLIC ${JACK_INCLUDE_DIR})
 target_link_libraries(${LIB_NAME} PUBLIC ${JACK_LIBRARY})
-target_compile_options(${LIB_NAME} PRIVATE -Werror -Wall -Wextra -Wno-unused-function -Wno-sign-compare -Wno-unused-variable)
+target_compile_options(${LIB_NAME} PRIVATE -Werror -Wall -Wextra -Wno-unused-function -Wno-sign-compare -Wno-unused-variable -Wno-unused-parameter )
+
+add_custom_command(TARGET ${LIB_NAME} POST_BUILD   
+                   COMMAND ${CMAKE_COMMAND} -E copy
+                   "${CMAKE_CURRENT_BINARY_DIR}/libAudioPluginJack.so"
+                   "/home/diaz/projects/Jack-Audio-For-Unity/sample/Assets/Plugins")
+
 # set_target_properties(${LIB_NAME} PROPERTIES BUNDLE TRUE)
 
 # SET_TARGET_PROPERTIES(UnityJackAudio PROPERTIES MACOSX_BUNDLE TRUE)

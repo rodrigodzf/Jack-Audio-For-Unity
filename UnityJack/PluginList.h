@@ -1,2 +1,2 @@
-DECLARE_EFFECT("Jack Send", UnityJackAudio)
+DECLARE_EFFECT("Jack Send", AudioPluginJack)
 
