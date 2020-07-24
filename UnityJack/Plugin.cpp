@@ -1,4 +1,4 @@
-// Copyright (C) 2016  Rodrigo Diaz
+// Copyright (C) 2020  Rodrigo Diaz
 //
 // This file is part of JackAudioUnity.
 //
@@ -135,6 +135,11 @@ extern "C" UNITY_AUDIODSP_EXPORT_API void WriteBuffer( int channel, float* buffe
 extern "C" UNITY_AUDIODSP_EXPORT_API void ReadBuffer( int channel, float* buffer, int size )
 {
   AudioPluginJack::JackClient::getInstance().read_buffer( channel, buffer, size );
+}
+
+extern "C" UNITY_AUDIODSP_EXPORT_API int GeBufferSize()
+{
+  return AudioPluginJack::JackClient::getInstance().get_buffer_size();
 }
 
 extern "C" UNITY_AUDIODSP_EXPORT_API void RegisterLogCallback( LogCallback callback )

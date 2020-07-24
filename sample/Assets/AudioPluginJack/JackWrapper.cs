@@ -1,4 +1,4 @@
-// Copyright (C) 2016  Rodrigo Diaz
+// Copyright (C) 2020  Rodrigo Diaz
 // 
 // This file is part of JackAudioUnity.
 // 
@@ -25,30 +25,47 @@ using AOT;
 namespace JackAudio
 {
 
-    public delegate void LogCallback(int level, IntPtr log);
+  public delegate void LogCallback(int level, IntPtr log);
 
-public class JackLogger {
+  public class JackLogger
+  {
 
     static bool installed = false;
 
     [MonoPInvokeCallback(typeof(LogCallback))]
     static void OnLogCallback(int level, IntPtr log)
     {
-        string debug_string = Marshal.PtrToStringAuto(log);
-        UnityEngine.Debug.Log(debug_string);
+      string debug_string = Marshal.PtrToStringAuto(log);
+      switch (level)
+      {
+        case 2:
+          {
+            Debug.LogError(debug_string);
+            break;
+          }
+        case 1:
+          {
+            Debug.LogWarning(debug_string);
+            break;
+          }
+        default:
+          Debug.Log(debug_string);
+          break;
+      }
     }
 
     public static void Initialize()
     {
-        if ( !installed )
-        {
-            JackWrapper.RegisterLogCallback(OnLogCallback);
-            installed = true;
-        }
+      if (!installed)
+      {
+        JackWrapper.RegisterLogCallback(OnLogCallback);
+        installed = true;
+      }
     }
-}
+  }
 
-public class JackWrapper {
+  public class JackWrapper
+  {
 
     [DllImport("AudioPluginJack")]
     public static extern bool CreateClient(uint bufferSize, uint sampleRate);
@@ -57,13 +74,15 @@ public class JackWrapper {
     [DllImport("AudioPluginJack")]
     public static extern bool DestroyClient();
     [DllImport("AudioPluginJack")]
-    public static extern bool RegisterPorts( uint inputs, uint outputs );
+    public static extern bool RegisterPorts(uint inputs, uint outputs);
     [DllImport("AudioPluginJack")]
-    public static extern void WriteBuffer( int channel, float[] buffer, int size );
+    public static extern void WriteBuffer(int channel, float[] buffer, int size);
     [DllImport("AudioPluginJack")]
-    public static extern void ReadBuffer( int channel, float[] buffer, int size );
+    public static extern void ReadBuffer(int channel, float[] buffer, int size);
+    [DllImport("AudioPluginJack")]
+    public static extern int GeBufferSize();
     [DllImport("AudioPluginJack", CallingConvention = CallingConvention.Cdecl)]
     public static extern void RegisterLogCallback(LogCallback buffer);
-}
+  }
 
 }

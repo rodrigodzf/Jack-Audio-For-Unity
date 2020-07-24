@@ -1,4 +1,4 @@
-// Copyright (C) 2016  Rodrigo Diaz
+// Copyright (C) 2020  Rodrigo Diaz
 //
 // This file is part of JackAudioUnity.
 //
@@ -23,6 +23,8 @@
 #include <chrono>
 #include <thread>
 #include <mutex>
+#include <iostream>
+
 #include "Jack.h"
 #include "Logger.h"
 #include "Stream.h"
@@ -41,7 +43,8 @@ public:
 
   int write_buffer( int idx, float* buffer, int buffer_size )
   {
-    if ( !activated ) { return -1; } 
+    if ( !activated ) { return -1; }
+    if ( output_streams.count(idx) == 0 ) { return -1; }
     output_streams[idx]->write(buffer, buffer_size);
     return 0;
   }
@@ -49,6 +52,7 @@ public:
   int read_buffer( int idx, float* buffer, int buffer_size )
   {
     if ( !activated ) { return -1; } 
+    if ( input_streams.count(idx) == 0 ) { return -1; }
     input_streams[idx]->read(buffer, buffer_size);
     return 0;
   }
@@ -119,23 +123,35 @@ public:
   bool unregister_ports_streams()
   {
     // panic
-    if ( !activated ) { return false; }
+    // if ( !activated ) { return false; }
 
-    for(auto& port : input_ports)
-    {
-      jack_port_unregister(client, port);
-    }
+    // for(auto& port : input_ports)
+    // {
+    //   if(0 != jack_port_unregister(client, port))
+    //   {
+    //     LOG("could not unregister port");
+    //     return false;
+    //   }
+    // }
 
-    for(auto& port : output_ports)
-    {
-      jack_port_unregister(client, port);
-    }
+    // for(auto& port : output_ports)
+    // {
+    //   if(0 != jack_port_unregister(client, port))
+    //   {
+    //     LOG("could not unregister port");
+    //     return false;
+    //   }
+    // }
 
-    input_ports.clear();
-    output_ports.clear();
+    inputs  = 0;
+    outputs = 0;
+    std::cout << "clear streams" << std::endl;
     input_streams.clear();
     output_streams.clear();
 
+    std::cout << "clear ports" << std::endl;
+    input_ports.clear();
+    output_ports.clear();
     return true;
   }
 
@@ -183,7 +199,8 @@ public:
 
     if ( 0 != jack_activate(client) )
     {
-      LOG("could not activate client");
+      ERROR("Could not activate client");
+      activated = false;
       return false;
     }
 
@@ -194,13 +211,40 @@ public:
 
   bool destroy_client()
   {
+    const std::lock_guard<std::mutex> lock(mutex);
+
     if ( activated )
     {
       activated = false; // important: activated flag must be false before resetting the client.
+      std::cout << "about to deactivate" << std::endl;
+
+      if( 0 != jack_deactivate(client))
+      {
+        std::cout << "could not deactivate client" << std::endl;
+        LOG("could not deactivate jack");
+        return false;
+      }
+
+      std::cout << "deactivated" << std::endl;
+
+      if( 0 != jack_client_close(client))
+      {
+        std::cout << "could not close client" << std::endl;
+        LOG("could not close jack");
+        return false;
+      }
+
+      std::cout << "closed" << std::endl;
+
+
       unregister_ports_streams();
-      jack_deactivate( client );
-      jack_client_close( client );
-      client = nullptr;
+
+      std::cout << "unregistered ports" << std::endl;
+
+      //client = nullptr;
+      current_buffer_size = 0;
+      //LOG("Client deactivated and uninitialized");
+      return true;
     }
     return false;
   }
@@ -227,13 +271,14 @@ public:
 public:
   static int Process( nframes_t buffer_size, void* arg )
   {
-    if ( 0 == buffer_size ) { return -1; }
+    if ( 0 == buffer_size ) { return 0; }
     JackClient* jack_client = ( JackClient* )arg;
-    if ( !jack_client->activated ) { return -1; }
-    if ( jack_client->input_streams.size() != jack_client->inputs ) { return -1; }
-    if ( jack_client->input_ports.size() != jack_client->inputs ) { return -1; }
-    if ( jack_client->output_streams.size() != jack_client->outputs ) { return -1; }
-    if ( jack_client->output_ports.size() != jack_client->outputs ) { return -1; }
+    if ( nullptr == jack_client ){ return 0; }
+    if ( false == jack_client->activated ) { return 0; }
+    if ( jack_client->input_streams.size() != jack_client->inputs ) { return 0; }
+    if ( jack_client->input_ports.size() != jack_client->inputs ) { return 0; }
+    if ( jack_client->output_streams.size() != jack_client->outputs ) { return 0; }
+    if ( jack_client->output_ports.size() != jack_client->outputs ) { return 0; }
     
     // get the input and output buffers
     for ( unsigned int i = 0; i < jack_client->inputs; i++ )
@@ -279,7 +324,7 @@ private:
   std::unique_ptr<Logger> logger;
 
   std::mutex mutex;
-  bool activated = false;
+  volatile bool activated = false;
 };
 
 } // namespace UnityJackAudio
