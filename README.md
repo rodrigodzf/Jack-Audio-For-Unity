@@ -35,9 +35,9 @@ Import the JackAudio.unitypackage in your project and make sure Unity audio sett
 
 Some important things to consider while setting up your project:
 
-**The default audio block size is 'Best Performance' or 1024. This has to match your configured buffer size in Jack. It is recommended to set it to 1024**
-**Your sample rate should also match the sample rate configured in Jack**
-**Jack ports are mono ports, make sure your Unity project settings use "Mono" as the default "Speaker Mode"**
+- **The default audio block size is 'Best Performance' or 1024. This has to match your configured buffer size in Jack. It is recommended to set it to 1024**
+- **Your sample rate should also match the sample rate configured in Jack**
+- **Jack ports are mono ports, make sure your Unity project settings use "Mono" as the default "Speaker Mode"**
 
 There are two ways of using this plugin. As an audio filter or as an effect.
 
