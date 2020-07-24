@@ -1,3 +1,21 @@
+// Copyright (C) 2020  Rodrigo Diaz
+//
+// This file is part of JackAudioUnity.
+//
+// JackAudioUnity is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// JackAudioUnity is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with JackAudioUnity.  If not, see <http://www.gnu.org/licenses/>.
+//
+
 using UnityEngine;
 using UnityEditor;
 using System;
@@ -24,14 +42,15 @@ namespace JackAudio
       if (!activated)
       {
         GUI.backgroundColor = Color.red;
-        GUILayout.BeginVertical(GUI.skin.box);
-        GUILayout.EndVertical();
-        GUI.backgroundColor = Color.white;
       }
       else
       { 
-        GUILayout.Space(8);
+        GUI.backgroundColor = Color.green;
       }
+
+      GUILayout.BeginVertical(GUI.skin.box);
+      GUILayout.EndVertical();
+      GUI.backgroundColor = Color.white;
 
       if (GUILayout.Button("Connect to Jack Server"))
       {
@@ -41,15 +60,19 @@ namespace JackAudio
         AudioConfiguration config = AudioSettings.GetConfiguration();
 
         JackLogger.Initialize();
-        JackWrapper.CreateClient((uint)bufferSize,
-                                 (uint)config.sampleRate);
-        JackWrapper.RegisterPorts((uint)inputs, (uint)outputs);
-        activated = JackWrapper.ActivateClient();
+        if (JackWrapper.CreateClient((uint)bufferSize,(uint)config.sampleRate))
+        {
+          JackWrapper.RegisterPorts((uint)inputs, (uint)outputs);
+          activated = JackWrapper.ActivateClient();
+        }
       }
 
       if (GUILayout.Button("Disconnect from Jack Server"))
       {
-        JackWrapper.DestroyClient();
+        if (JackWrapper.DestroyClient())
+        {
+          activated = false;
+        }
       }
 
       GUILayout.Label("Base Settings", EditorStyles.boldLabel);

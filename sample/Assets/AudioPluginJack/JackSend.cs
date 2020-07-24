@@ -1,5 +1,24 @@
-﻿using System.Collections;
+﻿// Copyright (C) 2020  Rodrigo Diaz
+//
+// This file is part of JackAudioUnity.
+//
+// JackAudioUnity is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// JackAudioUnity is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with JackAudioUnity.  If not, see <http://www.gnu.org/licenses/>.
+//
+
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace JackAudio
@@ -10,20 +29,26 @@ namespace JackAudio
     public int port = 0;
     private bool started = false;
     private float[] monodata;
-    private int bufferSize = 1024;
-
+    GCHandle monodataHandler;
+    private int bufferSize = 0;
 
     void Start()
     {
-      monodata = new float[1024]; //this has to be set from options
+      bufferSize = JackWrapper.GeBufferSize();
+      monodata = new float[bufferSize]; 
+
+      // The buffer passed to jack must be pinned to memory otherwise it is possible that the GC
+      // will free the buffer while jack is still using it
+      monodataHandler = GCHandle.Alloc(monodata, GCHandleType.Pinned);
       System.Array.Clear(monodata, 0, monodata.Length);
       started = true;
     }
 
     void OnDestroy()
     {
-      System.Array.Clear(monodata, 0, 1024);
-      JackWrapper.WriteBuffer(port, monodata, 1024);
+      System.Array.Clear(monodata, 0, bufferSize);
+      JackWrapper.WriteBuffer(port, monodata, bufferSize);
+      monodataHandler.Free();
     }
 
     void OnAudioFilterRead(float[] buffer, int channels)
