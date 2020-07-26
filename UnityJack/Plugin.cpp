@@ -81,11 +81,11 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback( UnityAudioEffectS
     {
       mono[i] = inbuffer[j];
     }
-    JackClient::getInstance().write_buffer( data->params[PORT], mono.data(), length );
+    JackClient::getInstance().write_buffer( static_cast<int>( data->params[PORT] ), mono.data(), length );
   }
   else if ( inchannels == 1 )
   {
-    JackClient::getInstance().write_buffer( data->params[PORT], inbuffer, length );
+    JackClient::getInstance().write_buffer( static_cast<int>( data->params[PORT] ), inbuffer, length );
   }
   return UNITY_AUDIODSP_OK;
 }
