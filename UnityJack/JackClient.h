@@ -93,7 +93,7 @@ public:
     LOG("Registering input ports:  " << requested_inputs);
     LOG("Registering output ports: " << requested_outputs);
 
-    for (unsigned int i = 0; i < requested_inputs; i++)
+    for (unsigned int i = 0; i < static_cast<unsigned int>(requested_inputs); i++)
     {
       // create internal stream
       input_streams.insert({i, std::make_unique<Stream>()});
@@ -104,7 +104,7 @@ public:
       if (nullptr != port) { input_ports.push_back(port); }
     }
 
-    for (unsigned int i = 0; i < requested_outputs; i++)
+    for (unsigned int i = 0; i < static_cast<unsigned int>(requested_outputs); i++)
     {
       // create internal stream
       output_streams.insert({i, std::make_unique<Stream>()});
@@ -199,7 +199,7 @@ public:
 
     if ( 0 != jack_activate(client) )
     {
-      ERROR("Could not activate client");
+      ERR("Could not activate client");
       activated = false;
       return false;
     }

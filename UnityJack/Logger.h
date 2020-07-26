@@ -34,9 +34,9 @@ class Logger
 public:
   enum eLogType
   {
-    LOG     = 0,
-    WARNING = 1,
-    ERROR   = 2
+    JACK_LOG     = 0,
+    JACK_WARNING = 1,
+    JACK_ERROR   = 2
   };
 
   void register_log_callback( LogCallback callback ) { mLogCallback = callback; }
@@ -55,21 +55,21 @@ public:
 {                                           \
   std::stringstream ss;                     \
   ss << msg;                                \
-  Logger::log( Logger::LOG, ss.str() );     \
+  Logger::log( Logger::JACK_LOG, ss.str() );     \
 }
 
 #define WARNING( msg )                      \
 {                                           \
   std::stringstream ss;                     \
   ss << msg;                                \
-  Logger::log( Logger::WARNING, ss.str() ); \
+  Logger::log( Logger::JACK_WARNING, ss.str() ); \
 }
 
-#define ERROR( msg )                        \
+#define ERR( msg )                        \
 {                                           \
   std::stringstream ss;                     \
   ss << msg;                                \
-  Logger::log( Logger::ERROR, ss.str() );   \
+  Logger::log( Logger::JACK_ERROR, ss.str() );   \
 }
 
 } // namespace UnityJackAudio
