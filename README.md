@@ -47,3 +47,29 @@ As an 'effect', you can add the 'Jack Send' effect to the appropiate Mixer Group
 
 To configure and connect Unity to the Jack server please use the Jack Editor Window under `Window -> Jack`
 
+## Compiling the plugin
+
+In linux, you can use the included CMakeLists.txt to build the library:
+
+```bash
+cd UnityJack
+mkdir build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+make
+```
+
+In Windows you need to give a hint to where the jack libraries are found, for example:
+
+```bash
+cd UnityJack
+mkdir build
+cd build
+cmake .. -A x64 -DJACK_LIB_DIR="C:\Program Files (x86)\Jack\lib" -DJACK_HEADER_DIR="C:\Program Files (x86)\Jack\includes" -DCMAKE_BUILD_TYPE=Release
+```
+
+*The default precompiled jack headers are a little old in windows and have to be altered in order to compile, refer to this [commit](https://github.com/jackaudio/jack2/commit/e26f98637ee4603b903599dc2e1862c2f373b864)*
+
+
+
+
