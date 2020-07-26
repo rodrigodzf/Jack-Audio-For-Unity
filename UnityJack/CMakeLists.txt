@@ -32,15 +32,22 @@ add_library(${LIB_NAME}
             AudioPluginInterface.h
             PluginList.h)
 
-target_link_options(${LIB_NAME} PUBLIC -rdynamic)
 target_include_directories(${LIB_NAME} PUBLIC ${JACK_INCLUDE_DIR})
 target_link_libraries(${LIB_NAME} PUBLIC ${JACK_LIBRARY})
-target_compile_options(${LIB_NAME} PRIVATE -Werror -Wall -Wextra -Wno-unused-function -Wno-sign-compare -Wno-unused-variable -Wno-unused-parameter )
 
-add_custom_command(TARGET ${LIB_NAME} POST_BUILD   
-                   COMMAND ${CMAKE_COMMAND} -E copy
-                   "${CMAKE_CURRENT_BINARY_DIR}/libAudioPluginJack.so"
-                   "/home/diaz/projects/Jack-Audio-For-Unity/sample/Assets/Plugins")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "gcc")
+    target_link_options(${LIB_NAME} PUBLIC -rdynamic)
+    target_compile_options(${LIB_NAME} PRIVATE -Werror -Wall -Wextra -Wno-unused-function -Wno-sign-compare -Wno-unused-variable -Wno-unused-parameter )
+endif()
+
+if(UNIX)
+    add_custom_command(TARGET ${LIB_NAME} POST_BUILD   
+                        COMMAND ${CMAKE_COMMAND} -E copy
+                        "${CMAKE_CURRENT_BINARY_DIR}/libAudioPluginJack.so"
+                        "${CMAKE_SOURCE_DIR}../sample/Assets/Plugins")
+endif()
+
+
 
 # set_target_properties(${LIB_NAME} PROPERTIES BUNDLE TRUE)
 
