@@ -41,11 +41,13 @@
 
 find_path(JACK_INCLUDE_DIR NAMES jack/jack.h
           DOC "The JACK include directory"
+          HINTS ${JACK_HEADER_DIR}
 )
 
 # jack2 name is exported with vcpkg
-find_library(JACK_LIBRARY NAMES jack jack2
+find_library(JACK_LIBRARY NAMES jack jack2 libjack64
              DOC "The JACK library"
+             HINTS ${JACK_LIB_DIR}
 )
 
 # handle the QUIETLY and REQUIRED arguments and set JACK_FOUND to TRUE if
