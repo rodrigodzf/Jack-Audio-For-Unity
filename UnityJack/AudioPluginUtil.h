@@ -8,22 +8,18 @@
 #include <string.h>
 #include <assert.h>
 
-#if UNITY_WIN
+#if PLATFORM_WIN
 #   include <windows.h>
 #else
-#   if UNITY_SPU
-#       include <stdint.h>
-#       include "ps3/AudioPluginInterfacePS3.h"
-#   else
-#       include <pthread.h>
-#   endif
+#   include <pthread.h>
 #   define strcpy_s strcpy
 #endif
 
 typedef int (*InternalEffectDefinitionRegistrationCallback)(UnityAudioEffectDefinition& desc);
 
 const float kMaxSampleRate = 22050.0f;
-const float kPI = 3.141592653589f;
+const float kPI = 3.141592653589793f;
+const double kPI_double = 3.141592653589793;
 
 inline float FastClip(float x, float minval, float maxval) { return (fabsf(x - minval) - fabsf(x - maxval) + (minval + maxval)) * 0.5f; }
 inline float FastMin(float a, float b) { return (a + b - fabsf(a - b)) * 0.5f; }
@@ -33,100 +29,84 @@ inline int FastFloor(float x) { return (int)floorf(x); } // TODO: Optimize
 char* strnew(const char* src);
 char* tmpstr(int index, const char* fmtstr, ...);
 
-class UnityComplexNumber
+template<typename T>
+class UnityComplexNumberT
 {
 public:
     // No constructor because we want to be able to define this inside anonymous unions (this is also why we don't use std::complex<T> here)
 
-    inline void Set(float _re, float _im)
+    inline void Set(T _re, T _im)
     {
         re = _re;
         im = _im;
     }
 
-    inline void Set(const UnityComplexNumber& c)
+    inline void Set(const UnityComplexNumberT<T>& c)
     {
         re = c.re;
         im = c.im;
     }
 
-    inline static void Mul(const UnityComplexNumber& a, float b, UnityComplexNumber& result)
+    template<typename T1, typename T2, typename T3>
+    inline static void Scale(const UnityComplexNumberT<T1>& a, T2 b, UnityComplexNumberT<T3>& result)
     {
         result.re = a.re * b;
         result.im = a.im * b;
     }
 
-    inline static void Mul(const UnityComplexNumber& a, const UnityComplexNumber& b, UnityComplexNumber& result)
+    template<typename T1, typename T2, typename T3>
+    inline static void Mul(const UnityComplexNumberT<T1>& a, const UnityComplexNumberT<T2>& b, UnityComplexNumberT<T3>& result)
     {
         // Store temporarily in case a or b reference the same memory as result
-        float t = a.re * b.im + a.im * b.re;
+        T3 t = a.re * b.im + a.im * b.re;
         result.re = a.re * b.re - a.im * b.im;
         result.im = t;
     }
 
-    inline static void Add(const UnityComplexNumber& a, const UnityComplexNumber& b, UnityComplexNumber& result)
+    template<typename T1, typename T2, typename T3>
+    inline static void Add(const UnityComplexNumberT<T1>& a, const UnityComplexNumberT<T2>& b, UnityComplexNumberT<T3>& result)
     {
         result.re = a.re + b.re;
         result.im = a.im + b.im;
     }
 
-    inline static void Sub(const UnityComplexNumber& a, const UnityComplexNumber& b, UnityComplexNumber& result)
+    template<typename T1, typename T2, typename T3>
+    inline static void Sub(const UnityComplexNumberT<T1>& a, const UnityComplexNumberT<T2>& b, UnityComplexNumberT<T3>& result)
     {
         result.re = a.re - b.re;
         result.im = a.im - b.im;
     }
 
-    inline const UnityComplexNumber operator *(float c) const
+    template<typename T1, typename T2, typename T3>
+    inline static void MulAdd(const UnityComplexNumberT<T1>& a, const UnityComplexNumberT<T2>& b, const UnityComplexNumberT<T2>& c, UnityComplexNumberT<T3>& result)
     {
-        UnityComplexNumber result;
-        result.re = re * c;
-        result.im = im * c;
-        return result;
+        // Store temporarily in case a or b reference the same memory as result
+        T3 t = a.re * b.im + a.im * b.re;
+        result.re = c.re + a.re * b.re - a.im * b.im;
+        result.im = c.im + t;
     }
 
-    inline const UnityComplexNumber operator *(const UnityComplexNumber& c) const
+    inline T Magnitude() const
     {
-        UnityComplexNumber result;
-        result.re = re * c.re - im * c.im;
-        result.im = re * c.im + im * c.re;
-        return result;
+        return (T)sqrt(re * re + im * im);
     }
 
-    inline const UnityComplexNumber operator +(const UnityComplexNumber& c) const
-    {
-        UnityComplexNumber result;
-        result.re = re + c.re;
-        result.im = im + c.im;
-        return result;
-    }
-
-    inline const UnityComplexNumber operator -(const UnityComplexNumber& c) const
-    {
-        UnityComplexNumber result;
-        result.re = re - c.re;
-        result.im = im - c.im;
-        return result;
-    }
-
-    inline float Magnitude() const
-    {
-        return sqrtf(re * re + im * im);
-    }
-
-    inline float Magnitude2() const
+    inline T Magnitude2() const
     {
         return re * re + im * im;
     }
 
 public:
-    float re, im;
+    T re, im;
 };
+
+typedef UnityComplexNumberT<float> UnityComplexNumber;
 
 class FFT
 {
 public:
-    static void Forward(UnityComplexNumber* data, int numsamples);
-    static void Backward(UnityComplexNumber* data, int numsamples);
+    static void Forward(UnityComplexNumber* data, int numsamples, bool highprecision);
+    static void Backward(UnityComplexNumber* data, int numsamples, bool highprecision);
 };
 
 class FFTAnalyzer : public FFT
@@ -171,6 +151,18 @@ public:
         if (w == length)
             w = 0;
         data[w] = sample;
+        writeindex = w;
+    }
+
+    inline void Feed(float* buf, int numsamples, int stride)
+    {
+        int w = writeindex;
+        for (int n = 0; n < numsamples; n++)
+        {
+            if (++w == length)
+                w = 0;
+            data[w] = buf[n * stride];
+        }
         writeindex = w;
     }
 
@@ -456,12 +448,10 @@ public:
     void Lock();
     void Unlock();
 protected:
-#if UNITY_WIN
+#if PLATFORM_WIN
     CRITICAL_SECTION crit_sec;
 #else
-# if !UNITY_SPU
     pthread_mutex_t mutex;
-# endif
 #endif
 };
 
