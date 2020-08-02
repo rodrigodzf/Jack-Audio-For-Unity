@@ -47,6 +47,15 @@ As an 'effect', you can add the 'Jack Send' effect to the appropiate Mixer Group
 
 To configure and connect Unity to the Jack server please use the Jack Editor Window under `Window -> Jack`
 
+### Caveats
+
+For Windows: 
+
+- If the Unity window loses focus then the sound will stop. To prevent this you can check the Run in Background checkbox in player settings.
+
+- You might need to recompile jack2 or disable the `Random memory allocations (Bottom-up ASLR)`, if Unity crashes on start. See this issue https://github.com/rodrigodzf/Jack-Audio-For-Unity/issues/15#issuecomment-527897023
+
+
 ## Compiling the plugin
 
 In linux, you can use the included CMakeLists.txt to build the library:
