@@ -1,2 +1,2 @@
-DECLARE_EFFECT("Jack Send", TestSharedStack)
+DECLARE_EFFECT("Jack Send", AudioPluginJack)
 

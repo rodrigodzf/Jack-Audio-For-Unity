@@ -1,6 +1,8 @@
 #include "AudioPluginUtil.h"
 #include <stdarg.h>
 
+#define ENABLE_TESTS ((PLATFORM_WIN || PLATFORM_OSX) && 1)
+
 char* strnew(const char* src)
 {
     char* newstr = new char[strlen(src) + 1];
@@ -20,58 +22,94 @@ char* tmpstr(int index, const char* fmtstr, ...)
 
 template<typename T> void UnitySwap(T& a, T& b) { T t = a; a = b; b = t; }
 
+template<typename T>
 static void FFTProcess(UnityComplexNumber* data, int numsamples, bool forward)
 {
-    int j = 0;
-    for (int i = 0; i < numsamples - 1; i++)
+    unsigned int count = 1, numbits = 0;
+    while (count < numsamples)
     {
+        count += count;
+        ++numbits;
+    }
+
+    static unsigned int* reversetable[32] = { NULL };
+    unsigned int* tbl = reversetable[numbits];
+    if (tbl == NULL)
+    {
+        tbl = new unsigned int[numsamples];
+        for (unsigned int n = 0; n < numsamples; n++)
+        {
+            unsigned int j = 1, k = 0, m = numsamples >> 1;
+            while (m > 0)
+            {
+                if (n & m)
+                    k |= j;
+                j += j;
+                m >>= 1;
+            }
+            tbl[n] = k;
+        }
+#if ENABLE_TESTS
+        for (unsigned int n = 0; n < numsamples; n++)
+        {
+            assert(tbl[tbl[n]] == n);
+        }
+#endif
+        reversetable[numbits] = tbl;
+    }
+
+    for (unsigned int i = 0; i < numsamples; i++)
+    {
+        unsigned int j = tbl[i];
         if (i < j)
         {
             UnitySwap(data[i].re, data[j].re);
             UnitySwap(data[i].im, data[j].im);
         }
-        int m = numsamples >> 1;
-        j ^= m;
-        while ((j & m) == 0)
-        {
-            m >>= 1;
-            j ^= m;
-        }
     }
-    const float k = (forward) ? -kPI : kPI;
-    for (int j = 1; j < numsamples; j <<= 1)
+
+    T w0 = (forward) ? -T(kPI_double) : T(kPI_double);
+    for (int j = 1; j < numsamples; j += j)
     {
-        const float w0 = k / (float)j;
-        UnityComplexNumber wr; wr.Set(cosf(w0), sinf(w0));
-        UnityComplexNumber w; w.Set(1.0f, 0.0f);
-        for (int m = 0; m < j; m++)
+        UnityComplexNumberT<T> wr, wd;
+        wr.Set(T(cos(w0)), T(sin(w0)));
+        wd.Set(T(1.0), T(0.0));
+        int step = j + j;
+        for (int m = 0; m < j; ++m)
         {
-            for (int i = m; i < numsamples; i += j << 1)
+            for (int i = m; i < numsamples; i += step)
             {
-                UnityComplexNumber t; UnityComplexNumber::Mul(w, data[i + j], t);
+                UnityComplexNumberT<T> t;
+                UnityComplexNumber::Mul(wd, data[i + j], t);
                 UnityComplexNumber::Sub(data[i], t, data[i + j]);
                 UnityComplexNumber::Add(data[i], t, data[i]);
             }
-            UnityComplexNumber::Mul(w, wr, w);
+            UnityComplexNumber::Mul(wd, wr, wd);
         }
+        w0 *= T(0.5);
     }
 }
 
-void FFT::Forward(UnityComplexNumber* data, int numsamples)
+void FFT::Forward(UnityComplexNumber* data, int numsamples, bool highprecision)
 {
-    FFTProcess(data, numsamples, true);
+    if (highprecision)
+        FFTProcess<double>(data, numsamples, true);
+    else
+        FFTProcess<float>(data, numsamples, true);
 }
 
-void FFT::Backward(UnityComplexNumber* data, int numsamples)
+void FFT::Backward(UnityComplexNumber* data, int numsamples, bool highprecision)
 {
-    for (int n = 0; n < numsamples; n++)
-        data[n].im = -data[n].im;
-    FFTProcess(data, numsamples, false);
+    if (highprecision)
+        FFTProcess<double>(data, numsamples, false);
+    else
+        FFTProcess<float>(data, numsamples, false);
+
     const float scale = 1.0f / (float)numsamples;
     for (int n = 0; n < numsamples; n++)
     {
-        data[n].re =  scale * data[n].re;
-        data[n].im = -scale * data[n].im;
+        data[n].re *= scale;
+        data[n].im *= scale;
     }
 }
 
@@ -97,7 +135,7 @@ void FFTAnalyzer::AnalyzeInput(float* data, int numchannels, int numsamples, flo
         ibuffer[n + spectrumSize - numsamples] = data[n * numchannels];
     for (int n = 0; n < spectrumSize; n++)
         cspec[n].Set(ibuffer[n] * window[n], 0.0f);
-    Forward(cspec, spectrumSize);
+    Forward(cspec, spectrumSize, true);
     for (int n = 0; n < spectrumSize / 2; n++)
     {
         float a = cspec[n].Magnitude();
@@ -115,7 +153,7 @@ void FFTAnalyzer::AnalyzeOutput(float* data, int numchannels, int numsamples, fl
         obuffer[n + spectrumSize - numsamples] = data[n * numchannels];
     for (int n = 0; n < spectrumSize; n++)
         cspec[n].Set(obuffer[n] * window[n], 0.0f);
-    Forward(cspec, spectrumSize);
+    Forward(cspec, spectrumSize, true);
     for (int n = 0; n < spectrumSize / 2; n++)
     {
         float a = cspec[n].Magnitude();
@@ -221,65 +259,55 @@ void HistoryBuffer::ReadBuffer(float* buffer, int numsamplesTarget, int numsampl
 
 Mutex::Mutex()
 {
-#if UNITY_WIN
-#if UNITY_WINRT
+#if PLATFORM_WIN
+#if PLATFORM_WINRT
     BOOL const result = InitializeCriticalSectionEx(&crit_sec, 0, CRITICAL_SECTION_NO_DEBUG_INFO);
     assert(FALSE != result);
 #else
     InitializeCriticalSection(&crit_sec);
 #endif
 #else
-# if !UNITY_SPU
     pthread_mutexattr_t attr;
     pthread_mutexattr_init(&attr);
     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
     pthread_mutex_init(&mutex, &attr);
     pthread_mutexattr_destroy(&attr);
-# endif
 #endif
 }
 
 Mutex::~Mutex()
 {
-#if UNITY_WIN
+#if PLATFORM_WIN
     DeleteCriticalSection(&crit_sec);
 #else
-# if !UNITY_SPU
     pthread_mutex_destroy(&mutex);
-# endif
 #endif
 }
 
 bool Mutex::TryLock()
 {
-#if UNITY_WIN
+#if PLATFORM_WIN
     return TryEnterCriticalSection(&crit_sec) != 0;
 #else
-# if !UNITY_SPU
     return pthread_mutex_trylock(&mutex) == 0;
-# endif
 #endif
 }
 
 void Mutex::Lock()
 {
-#if UNITY_WIN
+#if PLATFORM_WIN
     EnterCriticalSection(&crit_sec);
 #else
-# if !UNITY_SPU
     pthread_mutex_lock(&mutex);
-# endif
 #endif
 }
 
 void Mutex::Unlock()
 {
-#if UNITY_WIN
+#if PLATFORM_WIN
     LeaveCriticalSection(&crit_sec);
 #else
-# if !UNITY_SPU
     pthread_mutex_unlock(&mutex);
-# endif
 #endif
 }
 
@@ -354,14 +382,7 @@ void DeclareEffect(
     registereffectdefcallback(definition);
 }
 
-#if UNITY_PS3
-    #define DECLARE_EFFECT(namestr,ns) \
-    extern char _binary_spu_ ## ns ## _spu_elf_start[];
-    #include "PluginList.h"
-    #undef DECLARE_EFFECT
-#endif
-
-#define DECLARE_EFFECT(namestr,ns) \
+#define DECLARE_EFFECT(namestr, ns) \
     namespace ns \
     { \
     UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback            (UnityAudioEffectState* state); \
@@ -375,33 +396,19 @@ void DeclareEffect(
 #include "PluginList.h"
 #undef DECLARE_EFFECT
 
-#if UNITY_PS3
-    #define DECLARE_EFFECT(namestr,ns) \
-    DeclareEffect( \
-    definition[numeffects++], \
-    namestr, \
-    ns::CreateCallback, \
-    ns::ReleaseCallback, \
-    (UnityAudioEffect_ProcessCallback)_binary_spu_ ## ns ## _spu_elf_start, \
-    ns::SetFloatParameterCallback, \
-    ns::GetFloatParameterCallback, \
-    ns::GetFloatBufferCallback, \
-    ns::InternalRegisterEffectDefinition);
-#else
-    #define DECLARE_EFFECT(namestr,ns) \
-    DeclareEffect( \
-    definition[numeffects++], \
-    namestr, \
-    ns::CreateCallback, \
-    ns::ReleaseCallback, \
-    ns::ProcessCallback, \
-    ns::SetFloatParameterCallback, \
-    ns::GetFloatParameterCallback, \
-    ns::GetFloatBufferCallback, \
-    ns::InternalRegisterEffectDefinition);
-#endif
+#define DECLARE_EFFECT(namestr, ns) \
+DeclareEffect( \
+definition[numeffects++], \
+namestr, \
+ns::CreateCallback, \
+ns::ReleaseCallback, \
+ns::ProcessCallback, \
+ns::SetFloatParameterCallback, \
+ns::GetFloatParameterCallback, \
+ns::GetFloatBufferCallback, \
+ns::InternalRegisterEffectDefinition);
 
-extern "C" UNITY_AUDIODSP_EXPORT_API int UnityGetAudioEffectDefinitions(UnityAudioEffectDefinition*** definitionptr)
+extern "C" UNITY_AUDIODSP_EXPORT_API int AUDIO_CALLING_CONVENTION UnityGetAudioEffectDefinitions(UnityAudioEffectDefinition*** definitionptr)
 {
     static UnityAudioEffectDefinition definition[256];
     static UnityAudioEffectDefinition* definitionp[256];
@@ -414,4 +421,82 @@ extern "C" UNITY_AUDIODSP_EXPORT_API int UnityGetAudioEffectDefinitions(UnityAud
         definitionp[n] = &definition[n];
     *definitionptr = definitionp;
     return numeffects;
+}
+
+// Simplistic unit-test framework
+#if ENABLE_TESTS
+    #define NAP_TESTSUITE(name) \
+        namespace testsuite_##name { inline const char* GetSuiteName() { return #name; } }\
+        namespace testsuite_##name
+    #define NAP_UNITTEST(name) \
+        struct NAP_Test_##name { NAP_Test_##name(const char* testname); };\
+        static NAP_Test_##name test_##name(#name);\
+        NAP_Test_##name::NAP_Test_##name(const char* testname)
+    #define NAP_CHECK(...) \
+        do\
+        {\
+            if(!(__VA_ARGS__))\
+            {\
+                printf("%s(%d): Unit test '%s' failed for expression '%s'.\n", __FILE__, __LINE__, testname, #__VA_ARGS__);\
+                assert(false && "Unit test in native audio plugin framework failed!");\
+            }\
+        } while(false)
+#else
+    #define NAP_TESTSUITE(name) namespace testsuite_##name
+    #define NAP_UNITTEST(name) static void test_##name()
+    #define NAP_CHECK(...) do {} while(false)
+#endif
+
+NAP_TESTSUITE(FFT)
+{
+    NAP_UNITTEST(Accuracy)
+    {
+        for (int test = 0; test < 2; test++)
+        {
+            bool highprecision = (test == 1);
+
+            Random r;
+            for (int b = 4; b <= 20; b++)
+            {
+                int num = 1 << b;
+
+                UnityComplexNumber* test1 = new UnityComplexNumber[num];
+                UnityComplexNumber* test2 = new UnityComplexNumber[num];
+
+                for (int n = 0; n < num; n++)
+                {
+                    test1[n].re = r.GetFloat(-1.0f, 1.0f);
+                    test1[n].im = r.GetFloat(-1.0f, 1.0f);
+                    test2[n].re = test1[n].re;
+                    test2[n].im = test1[n].im;
+                }
+
+                FFT::Forward(test2, num, highprecision);
+                FFT::Backward(test2, num, highprecision);
+
+                double errtol = (highprecision) ? 1.0e-6 : 1.5e-3;
+                double maxerr = 0.0f, errsum = 0.0, rms = 0.0;
+                for (int n = 0; n < num; n++)
+                {
+                    float err, diff;
+                    diff = test1[n].re - test2[n].re; err = fabsf(diff); NAP_CHECK(err < errtol); errsum += err; if (err > maxerr)
+                        maxerr = err;
+                    rms += diff * diff;
+                    diff = test1[n].im - test2[n].im; err = fabsf(diff); NAP_CHECK(err < errtol); errsum += err; if (err > maxerr)
+                        maxerr = err;
+                    rms += diff * diff;
+                }
+
+                double avgerr = errsum / (double)num;
+                rms = sqrt(rms / (double)num);
+
+                delete[] test1;
+                delete[] test2;
+
+                printf("%2d bits: MaxErr=%15.8g ErrSum=%15.8g AvgErr=%15.8g ErrRMS=%15.8g [%s precision]\n", b, maxerr, errsum, avgerr, rms, highprecision ? "high" : "low");
+                NAP_CHECK(avgerr < errtol);
+                NAP_CHECK(rms < errtol);
+            }
+        }
+    }
 }
