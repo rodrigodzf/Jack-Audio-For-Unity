@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This library/plugin enables multichannel audio routing between Unity3D and JackAudio. Simply import the compiled bundle/dll to your project.
+This library/plugin enables multichannel audio routing between Unity3D and JackAudio.
 
 ## Installation
 
