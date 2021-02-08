@@ -161,35 +161,41 @@ public:
   {
     const std::lock_guard<std::mutex> lock(mutex);
 
-    if ( !activated )
-    {
-      LOG("Creating Client with: ");
-      LOG("BufferSize: " << buffer_size);
-      LOG("SampleRate: " << sample_rate);
+     if ( !activated )
+     {
+       LOG("Creating Client with: \n"
+           "BufferSize: " << buffer_size << "\n"
+           "SampleRate: " << sample_rate);
 
-      jack_status_t status;
-      client = jack_client_open( "Unity3D", JackNullOption, &status );
-      if ( !client )
-      {
-        LOG("Could not create the client");
-        return false;
-      }
+       jack_status_t status;
+       client = jack_client_open( "Unity3D", JackNullOption, &status );
+       if ( !client )
+       {
+         LOG("Could not create the client");
+         return false;
+       }
       
-      // make sure we are dealing with the same buffer size and sample rate
-      current_buffer_size = jack_get_buffer_size( client );
-      if ( buffer_size != current_buffer_size )
-      {
-        LOG("Invalid buffersize");
-        return false;
-      }
+       // make sure we are dealing with the same buffer size and sample rate
+       current_buffer_size = jack_get_buffer_size( client );
+       if ( buffer_size != current_buffer_size )
+       {
+         LOG("Invalid buffersize, Jack Buffer Size: " << current_buffer_size);
+         return false;
+       }
 
-      // set callbacks
-      if ( 0 != set_callbacks() )
-      {
-        LOG("could not set callbacks");
-        return false;
-      }
-    }
+       if ( sample_rate != jack_get_sample_rate( client ) )
+       {
+         LOG("Invalid samplerate, Jack Sample Rate: " << jack_get_sample_rate( client ));
+         return false;
+       }
+
+       // set callbacks
+       if ( 0 != set_callbacks() )
+       {
+         LOG("Could not set callbacks");
+         return false;
+       }
+     }
     return true;
   }
 

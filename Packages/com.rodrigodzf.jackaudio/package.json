@@ -1,0 +1,31 @@
+{
+    "author": "Rodrigo Diaz",
+    "dependencies": {},
+    "description": "Jack audio plugin for unity",
+    "displayName": "JackAudioForUnity",
+    "keywords": [
+        "unity"
+    ],
+    "license": "UNLICENSED",
+    "name": "com.rodrigodzf.jackaudioforunity",
+    "repository": "https://github.com/rodrigodzf/Jack-Audio-For-Unity",
+    "unity": "2019.4",
+    "version": "1.1.0",
+    "samples": [
+        {
+            "displayName": "Receive",
+            "description": "Sample of receiving audio data with jack",
+            "path": "Samples~/Receive"
+        },
+        {
+            "displayName": "Send",
+            "description": "Sample of sending audio data with jack",
+            "path": "Samples~/Send"
+        },
+        {
+            "displayName": "SendEffect",
+            "description": "Sample of sending audio data thorugh an audioeffect with jack",
+            "path": "Samples~/SendEffect"
+        }
+    ]
+}

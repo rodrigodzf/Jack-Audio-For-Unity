@@ -20,9 +20,10 @@
 
 #include <string>
 #include <sstream>
+#include "AudioPluginInterface.h"
 
 // Logger callback
-extern "C" typedef void ( *LogCallback )( int, const char* );
+extern "C" typedef void(UNITY_AUDIODSP_CALLBACK *LogCallback)(int level, const char* message);
 
 namespace AudioPluginJack
 {
