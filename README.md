@@ -1,3 +1,5 @@
+[![openupm](https://img.shields.io/npm/v/com.rodrigodzf.jackaudioforunity?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.rodrigodzf.jackaudioforunity/)
+
 # Jack Audio For Unity
 
 ## Introduction
@@ -5,6 +7,8 @@
 This library/plugin enables multichannel audio routing between Unity3D and JackAudio.
 
 ## Installation
+
+The prefered method of installation is using [OpenUPM](https://openupm.com/)
 
 ### Windows
 
