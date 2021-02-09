@@ -44,7 +44,7 @@ if(UNIX)
     add_custom_command(TARGET ${LIB_NAME} POST_BUILD   
                         COMMAND ${CMAKE_COMMAND} -E copy
                         "${CMAKE_CURRENT_BINARY_DIR}/libAudioPluginJack.so"
-                        "${CMAKE_SOURCE_DIR}../sample/Assets/Plugins")
+                        "${CMAKE_SOURCE_DIR}../../Packages/com.rodrigodzf.jackaudio/Runtime/Plugins")
 endif()
 
 
