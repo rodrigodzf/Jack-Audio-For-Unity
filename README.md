@@ -8,7 +8,7 @@ This library/plugin enables multichannel audio routing between Unity3D and JackA
 
 ## Installation
 
-The prefered method of installation is using [OpenUPM](https://openupm.com/)
+The prefered method of installation is using [OpenUPM](https://openupm.com/packages/com.rodrigodzf.jackaudioforunity/)
 
 ### Windows
 
