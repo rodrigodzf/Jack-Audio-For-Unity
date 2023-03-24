@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: "Build"
-        uses: .github/workflows/build.yaml
+        uses: ./.github/workflows/build.yaml
         with:
           build_type: "Release"
       
