@@ -24,64 +24,64 @@ using AOT;
 
 namespace JackAudio
 {
-  public class JackLogger
-  {
-    public delegate void LogCallback(int level, string log);
-
-    static bool installed = false;
-
-    [MonoPInvokeCallback(typeof(LogCallback))]
-    public static void OnLogCallback(int level, string log)
+    public class JackLogger
     {
-      switch (level)
-      {
-        case 2:
-          {
-            Debug.LogError($"[cpp] {log}");
-            break;
-          }
-        case 1:
-          {
-            Debug.LogWarning($"[cpp] {log}");
-            break;
-          }
-        default:
-          Debug.Log($"[cpp] {log}");
-          break;
-      }
+        public delegate void LogCallback(int level, string log);
+
+        static bool installed = false;
+
+        [MonoPInvokeCallback(typeof(LogCallback))]
+        public static void OnLogCallback(int level, string log)
+        {
+            switch (level)
+            {
+                case 2:
+                    {
+                        Debug.LogError($"[cpp] {log}");
+                        break;
+                    }
+                case 1:
+                    {
+                        Debug.LogWarning($"[cpp] {log}");
+                        break;
+                    }
+                default:
+                    Debug.Log($"[cpp] {log}");
+                    break;
+            }
+        }
+
+        public static void Initialize()
+        {
+            if (!installed)
+            {
+                JackWrapper.RegisterLogCallback(OnLogCallback);
+                installed = true;
+            }
+        }
     }
 
-    public static void Initialize()
+    public class JackWrapper
     {
-      if (!installed)
-      {
-        JackWrapper.RegisterLogCallback(OnLogCallback);
-        installed = true;
-      }
+        private const string PluginName = "AudioPluginJack";
+
+
+        [DllImport(PluginName)]
+        public static extern bool CreateClient(uint bufferSize, uint sampleRate);
+        [DllImport(PluginName)]
+        public static extern bool ActivateClient();
+        [DllImport(PluginName)]
+        public static extern bool DestroyClient();
+        [DllImport(PluginName)]
+        public static extern bool RegisterPorts(uint inputs, uint outputs);
+        [DllImport(PluginName)]
+        public static extern void WriteBuffer(int channel, float[] buffer, int size);
+        [DllImport(PluginName)]
+        public static extern void ReadBuffer(int channel, float[] buffer, int size);
+        [DllImport(PluginName)]
+        public static extern int GeBufferSize();
+        [DllImport(PluginName, ExactSpelling = true, CharSet = CharSet.Ansi)]
+        public static extern void RegisterLogCallback(JackLogger.LogCallback callback);
     }
-  }
-
-  public class JackWrapper
-  {
-    private const string PluginName = "AudioPluginJack";
-
-
-    [DllImport(PluginName)]
-    public static extern bool CreateClient(uint bufferSize, uint sampleRate);
-    [DllImport(PluginName)]
-    public static extern bool ActivateClient();
-    [DllImport(PluginName)]
-    public static extern bool DestroyClient();
-    [DllImport(PluginName)]
-    public static extern bool RegisterPorts(uint inputs, uint outputs);
-    [DllImport(PluginName)]
-    public static extern void WriteBuffer(int channel, float[] buffer, int size);
-    [DllImport(PluginName)]
-    public static extern void ReadBuffer(int channel, float[] buffer, int size);
-    [DllImport(PluginName)]
-    public static extern int GeBufferSize();
-    [DllImport(PluginName, ExactSpelling = true, CharSet = CharSet.Ansi)]
-    public static extern void RegisterLogCallback(JackLogger.LogCallback callback);
-  }
 
 }

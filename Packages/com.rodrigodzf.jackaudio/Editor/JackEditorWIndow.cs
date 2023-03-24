@@ -23,70 +23,70 @@ using System;
 namespace JackAudio
 {
 
-  public class JackEditorWindow : EditorWindow
-  {
-    int inputs = 1;
-    int outputs = 1;
-
-    private RangeInt inputsRange = new RangeInt(0, 64);
-    private RangeInt outputsRange = new RangeInt(0, 64);
-
-    bool activated = false;
-
-    [MenuItem("Window/Jack")]
-    static void Init()
+    public class JackEditorWindow : EditorWindow
     {
-      // Get existing open window or if none, make a new one:
-      JackEditorWindow window = (JackEditorWindow)EditorWindow.GetWindow(typeof(JackEditorWindow));
-      window.Show();
-    }
+        int inputs = 1;
+        int outputs = 1;
 
-    void OnGUI()
-    {
-      if (!activated)
-      {
-        GUI.backgroundColor = Color.red;
-      }
-      else
-      { 
-        GUI.backgroundColor = Color.green;
-      }
+        private RangeInt inputsRange = new RangeInt(0, 64);
+        private RangeInt outputsRange = new RangeInt(0, 64);
 
-      GUILayout.BeginVertical(GUI.skin.box);
-      GUILayout.EndVertical();
-      GUI.backgroundColor = Color.white;
+        bool activated = false;
 
-      if (GUILayout.Button("Connect to Jack Server"))
-      {
-        int numbuffers;
-        int bufferSize;
-        AudioSettings.GetDSPBufferSize(out bufferSize, out numbuffers);
-        AudioConfiguration config = AudioSettings.GetConfiguration();
-
-        JackLogger.Initialize();
-        if (JackWrapper.CreateClient((uint)bufferSize,(uint)config.sampleRate))
+        [MenuItem("Window/Jack")]
+        static void Init()
         {
-          JackWrapper.RegisterPorts((uint)inputs, (uint)outputs);
-          activated = JackWrapper.ActivateClient();
+            // Get existing open window or if none, make a new one:
+            JackEditorWindow window = (JackEditorWindow)EditorWindow.GetWindow(typeof(JackEditorWindow));
+            window.Show();
         }
-      }
 
-      if (GUILayout.Button("Disconnect from Jack Server"))
-      {
-        if (JackWrapper.DestroyClient())
+        void OnGUI()
         {
-          activated = false;
+            if (!activated)
+            {
+                GUI.backgroundColor = Color.red;
+            }
+            else
+            {
+                GUI.backgroundColor = Color.green;
+            }
+
+            GUILayout.BeginVertical(GUI.skin.box);
+            GUILayout.EndVertical();
+            GUI.backgroundColor = Color.white;
+
+            if (GUILayout.Button("Connect to Jack Server"))
+            {
+                int numbuffers;
+                int bufferSize;
+                AudioSettings.GetDSPBufferSize(out bufferSize, out numbuffers);
+                AudioConfiguration config = AudioSettings.GetConfiguration();
+
+                JackLogger.Initialize();
+                if (JackWrapper.CreateClient((uint)bufferSize, (uint)config.sampleRate))
+                {
+                    JackWrapper.RegisterPorts((uint)inputs, (uint)outputs);
+                    activated = JackWrapper.ActivateClient();
+                }
+            }
+
+            if (GUILayout.Button("Disconnect from Jack Server"))
+            {
+                if (JackWrapper.DestroyClient())
+                {
+                    activated = false;
+                }
+            }
+
+            GUILayout.Label("Base Settings", EditorStyles.boldLabel);
+            inputs = Mathf.Clamp(EditorGUILayout.IntField("Inputs", inputs), inputsRange.start, inputsRange.end);
+            outputs = Mathf.Clamp(EditorGUILayout.IntField("Outputs", outputs), outputsRange.start, outputsRange.end);
+
+            // groupEnabled = EditorGUILayout.BeginToggleGroup("Optional Settings", groupEnabled);
+            // inputs = EditorGUILayout.IntField("Inputs", inputs);
+            // outputs = EditorGUILayout.IntField("Outputs", outputs);
+            // EditorGUILayout.EndToggleGroup();
         }
-      }
-
-      GUILayout.Label("Base Settings", EditorStyles.boldLabel);
-      inputs = Mathf.Clamp(EditorGUILayout.IntField("Inputs", inputs), inputsRange.start, inputsRange.end);
-      outputs = Mathf.Clamp(EditorGUILayout.IntField("Outputs", outputs), outputsRange.start, outputsRange.end);
-
-      // groupEnabled = EditorGUILayout.BeginToggleGroup("Optional Settings", groupEnabled);
-      // inputs = EditorGUILayout.IntField("Inputs", inputs);
-      // outputs = EditorGUILayout.IntField("Outputs", outputs);
-      // EditorGUILayout.EndToggleGroup();
     }
-  }
 }
