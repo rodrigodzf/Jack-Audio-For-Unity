@@ -168,7 +168,10 @@ public:
            "SampleRate: " << sample_rate);
 
        jack_status_t status;
-       client = jack_client_open( "Unity3D", JackNullOption, &status );
+       
+       // create the client
+       // but avoid trying to start the server
+       client = jack_client_open( "Unity3D", JackNoStartServer, &status );
        if ( !client )
        {
          LOG("Could not create the client");
