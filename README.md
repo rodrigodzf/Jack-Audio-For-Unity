@@ -1,6 +1,7 @@
-[![openupm](https://img.shields.io/npm/v/com.rodrigodzf.jackaudioforunity?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.rodrigodzf.jackaudioforunity/)
-
 # Jack Audio For Unity
+
+[![openupm](https://img.shields.io/npm/v/com.rodrigodzf.jackaudioforunity?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.rodrigodzf.jackaudioforunity/)
+![GitHub](https://img.shields.io/github/license/rodrigodzf/Jack-Audio-For-Unity)
 
 ## Introduction
 
@@ -57,7 +58,7 @@ For Windows:
 
 - If the Unity window loses focus then the sound will stop. To prevent this you can check the Run in Background checkbox in player settings.
 
-- You might need to recompile jack2 or disable the `Random memory allocations (Bottom-up ASLR)`, if Unity crashes on start. See this issue https://github.com/rodrigodzf/Jack-Audio-For-Unity/issues/15#issuecomment-527897023
+- You might need to recompile jack2 or disable the `Random memory allocations (Bottom-up ASLR)`, if Unity crashes on start. See [this](https://github.com/rodrigodzf/Jack-Audio-For-Unity/issues/15#issuecomment-527897023) issue.
 
 
 ## Compiling the plugin
@@ -66,23 +67,17 @@ In linux, you can use the included CMakeLists.txt to build the library:
 
 ```bash
 cd UnityJack
-mkdir build
-cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
-make
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j
 ```
 
 In Windows you need to give a hint to where the jack libraries are found, for example:
 
 ```bash
 cd UnityJack
-mkdir build
-cd build
-cmake .. -A x64 -DJACK_LIB_DIR="C:\Program Files (x86)\Jack\lib" -DJACK_HEADER_DIR="C:\Program Files (x86)\Jack\includes" -DCMAKE_BUILD_TYPE=Release
+cmake -S . -B build -A x64 -DJACK_LIB_DIR="C:\Program Files (x86)\Jack\lib" -DJACK_HEADER_DIR="C:\Program Files (x86)\Jack\includes" -DCMAKE_BUILD_TYPE=Release
 ```
 
+And then build the generated project with Visual Studio.
+
 *The default precompiled jack headers are a little old in windows and have to be altered in order to compile, refer to this [commit](https://github.com/jackaudio/jack2/commit/e26f98637ee4603b903599dc2e1862c2f373b864)*
-
-
-
-
