@@ -10,7 +10,7 @@
     "name": "com.rodrigodzf.jackaudioforunity",
     "repository": "https://github.com/rodrigodzf/Jack-Audio-For-Unity",
     "unity": "2019.4",
-    "version": "1.1.0",
+    "version": "1.1.2",
     "samples": [
         {
             "displayName": "Receive",
